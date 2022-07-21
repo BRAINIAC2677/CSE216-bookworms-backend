@@ -147,19 +147,5 @@ class Reads(models.Model):
         db_table = 'reads'
         unique_together = (('book', 'user'),)
 
-class Users(models.Model):
-    user_id = models.AutoField(primary_key=True)
-    username = models.TextField()
-    full_name = models.TextField(blank=True, null=True)
-    photo_url = models.TextField(blank=True, null=True)
-    bio = models.TextField(blank=True, null=True)
-    email = models.TextField(unique=True)
-    password = models.TextField()
-    reading_challenge = models.ForeignKey(
-        ReadingChallenge, models.DO_NOTHING, blank=True, null=True)
-    user_permissions = models.TextField(blank=True, null=True)
 
-    class Meta:
-        managed = False
-        db_table = 'users'
 
