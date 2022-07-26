@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User 
+from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
 
 from rest_framework import serializers
@@ -7,31 +7,59 @@ from rest_framework.validators import UniqueValidator
 from .models import Reader
 
 
-class ReaderSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Reader
-        fields = '__all__' 
-
-class ReaderRegisterSerializer(serializers.Serializer):
-    username = serializers.CharField(
-        max_length=30,
+class UserSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(
+        required=True,
         validators=[UniqueValidator(queryset=User.objects.all())]
     )
-    first_name = serializers.CharField(max_length=30, required=True)
-    last_name = serializers.CharField(max_length=30, required=True)
-    photo_url = serializers.CharField(max_length=200, allow_blank=True)
-    bio = serializers.CharField(max_length=200, allow_blank=True)
-    email = serializers.EmailField(
-            required=True,
-            validators=[UniqueValidator(queryset=User.objects.all())]
-            )
-    password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
-    confirm_password = serializers.CharField(write_only=True, required=True)
 
-    def validate(self, attrs):
-        if attrs['password'] != attrs['confirm_password']:
-            raise serializers.ValidationError({"password": "Password fields didn't match."})
-        return attrs
+    class Meta:
+        model = User
+        fields = ['username', 'password',
+                  'email', 'first_name', 'last_name']
+        extra_kwargs = {
+            'password': {
+                'write_only': True,
+                'required': True,
+            },
+            'first_name': {
+                'required': True,
+            },
+            'last_name': {
+                'required': True,
+            },
+            'username': {
+                'required': True,
+            },
+        }
+
+
+class ReaderSerializer(serializers.ModelSerializer):
+    user = UserSerializer(required=True)
+
+    class Meta:
+        model = Reader
+        fields = ['user', 'photo_url', 'bio']
 
     def create(self, validated_data):
-        pass
+        user_data = validated_data.pop('user')
+        user = User.objects.create(**user_data)
+        user.set_password(user_data.get('password'))
+        user.save()
+        reader = Reader.objects.create(user=user, **validated_data)
+        return reader
+
+    def update(self, instance, validated_data):
+        user_data = validated_data.pop('user')
+        user = instance.user
+        user.username = user_data.get('username', user.username)
+        user.email = user_data.get('email', user.email)
+        user.first_name = user_data.get('first_name', user.first_name)
+        user.last_name = user_data.get('last_name', user.last_name)
+        user.set_password(user_data.get('password', user.password))
+        user.save()
+        instance.photo_url = validated_data.get(
+            'photo_url', instance.photo_url)
+        instance.bio = validated_data.get('bio', instance.bio)
+        instance.save()
+        return instance
