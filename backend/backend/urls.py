@@ -20,4 +20,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/reader/', include('reader.urls')),
     path('api/genre/', include('genre.urls')),
+    path('api/book/', include('book.urls')),
 ]

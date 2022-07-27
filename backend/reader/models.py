@@ -8,5 +8,8 @@ class Reader(models.Model):
     photo_url = models.CharField(max_length=200, blank=True, null=True)
     bio = models.CharField(max_length=200, blank=True, null=True)
 
+    def __str__(self):
+        return self.user.username
+
     class Meta:
         db_table = 'reader'
