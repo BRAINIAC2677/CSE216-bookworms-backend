@@ -3,7 +3,6 @@ from django.test import TestCase
 
 # Create your tests here.
 
-
 class ReaderRegisterAPIViewTests(TestCase):
     def test_register_with_duplicate_email(self):
         data = {
@@ -58,7 +57,7 @@ class ReaderTokenAuthenticationTests(TestCase):
         }
         response = self.client.post(
             reverse('api-token-auth'), data, content_type='application/json')
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)      
 
 
 class ReaderUpdateAPIViewTests(TestCase):
@@ -90,3 +89,4 @@ class ReaderUpdateAPIViewTests(TestCase):
         self.client.post(reverse('reader-update'), data,
                          content_type='application/json', **headers)
         self.assertEqual(response.status_code, 201)
+

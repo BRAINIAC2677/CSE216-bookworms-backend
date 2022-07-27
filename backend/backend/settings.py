@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'reader',
     'book',
+    'genre',
 ]
 
 MIDDLEWARE = [
