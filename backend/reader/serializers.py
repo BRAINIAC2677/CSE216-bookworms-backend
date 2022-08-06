@@ -6,8 +6,7 @@ from rest_framework.validators import UniqueValidator
 
 from .models import Reader
 
-
-class UserSerializer(serializers.ModelSerializer):
+class ReaderUserSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(
         required=True,
         validators=[UniqueValidator(queryset=User.objects.all())]
@@ -35,7 +34,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class ReaderSerializer(serializers.ModelSerializer):
-    user = UserSerializer(required=True)
+    user = ReaderUserSerializer(required=True)
 
     class Meta:
         model = Reader
@@ -45,6 +44,7 @@ class ReaderSerializer(serializers.ModelSerializer):
         user_data = validated_data.pop('user')
         user = User.objects.create(**user_data)
         user.set_password(user_data.get('password'))
+        user.groups.add('reader')
         user.save()
         reader = Reader.objects.create(user=user, **validated_data)
         return reader

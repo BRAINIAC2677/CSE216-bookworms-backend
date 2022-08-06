@@ -7,10 +7,15 @@ from reader.models import Reader
 
 class BookReadSerializer(serializers.ModelSerializer):
     genres = serializers.StringRelatedField(many=True, read_only = True)
-    authors = serializers.StringRelatedField(many=True, read_only = True)
+    authors = serializers.SerializerMethodField()
+
     class Meta:
         model = Book
         fields = ['isbn', 'title', 'description', 'photo_url', 'page_count', 'created_at', 'updated_at', 'genres', 'authors']
+        read_only_fields = '__all__'
+    
+    def get_authors(self, obj):
+        return [{author.user.get_full_name(), author.rid} for author in obj.authors.all()]
 
 
 class BookWriteSerializer(serializers.Serializer):
@@ -21,6 +26,7 @@ class BookWriteSerializer(serializers.Serializer):
     class Meta:
         model = Book 
         fields = ['isbn','title', 'description','photo_url','page_count', 'genres', 'authors']
+        write_only_fields = '__all__'
         extra_kwargs = {
             'title': {
                 'required': True,

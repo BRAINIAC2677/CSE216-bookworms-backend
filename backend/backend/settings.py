@@ -44,6 +44,12 @@ INSTALLED_APPS = [
     'reader',
     'book',
     'genre',
+    'reads',
+    'bookreview',
+    'library',
+    'librarystock',
+    'bookborrow',
+    'friend',
 ]
 
 MIDDLEWARE = [

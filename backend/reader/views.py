@@ -46,3 +46,7 @@ class ReaderDeleteView(DestroyAPIView):
 
     def get_object(self):
         return self.request.user.reader
+
+    def perform_destroy(self, instance):
+        instance.user.delete()
+        return super().perform_destroy(instance)
