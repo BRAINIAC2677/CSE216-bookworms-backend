@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from django.contrib.auth.password_validation import validate_password
+from django.contrib.auth.models import Group
 
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
@@ -44,9 +44,11 @@ class ReaderSerializer(serializers.ModelSerializer):
         user_data = validated_data.pop('user')
         user = User.objects.create(**user_data)
         user.set_password(user_data.get('password'))
-        user.groups.add('reader')
-        user.save()
         reader = Reader.objects.create(user=user, **validated_data)
+        if not Group.objects.filter(name='reader').exists():
+            Group.objects.create(name='reader')
+        user.groups.add(Group.objects.get(name='reader'))
+        user.save()
         return reader
 
     def update(self, instance, validated_data):

@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User 
+from django.contrib.auth.models import Group 
 
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
@@ -35,7 +36,9 @@ class LibraryWriteSerializer(serializers.ModelSerializer):
         user_data = validated_data.pop('user')
         user = User.objects.create(**user_data)
         user.set_password(user_data.get('password'))
-        user.groups.add('library')
+        if not Group.objects.filter(name='library').exists():
+            Group.objects.create(name='library')
+        user.groups.add(Group.objects.get(name='library'))
         user.save()
         library = Library.objects.create(user=user, **validated_data)
         return library
