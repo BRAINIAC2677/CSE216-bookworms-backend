@@ -29,7 +29,7 @@ SECRET_KEY = str(os.getenv('SECRET_KEY'))
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['bookworms-backend77.herokuapp.com']
+ALLOWED_HOSTS = ['bookworms-backend77.herokuapp.com', '127.0.0.1']
 
 
 # Application definition
@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     # third party apps
     'rest_framework',
     'corsheaders',
+    'drf_spectacular',
+    'drf_spectacular_sidecar',
 
     # local apps
     'rest_framework.authtoken',
@@ -73,7 +75,7 @@ MIDDLEWARE = [
 
 CORS_ALLOWED_ORIGINS = [
     "http://192.168.56.1:3000",
-    "https://bookworms-next.vercel.app/",
+    "https://bookworms-next.vercel.app",
 ]
 
 ROOT_URLCONF = 'backend.urls'
@@ -93,6 +95,20 @@ TEMPLATES = [
         },
     },
 ]
+
+REST_FRAEMWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+SPECTACULAR_SETTINGS = {
+    'SWAGGER_UI_DIST': 'SIDECAR',  
+    'SWAGGER_UI_FAVICON_HREF': 'SIDECAR',
+    'REDOC_DIST': 'SIDECAR',
+    'TITLE': 'Bookworms API',
+    'DESCRIPTION': 'API for Bookworms app',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+}
 
 WSGI_APPLICATION = 'backend.wsgi.application'
 
