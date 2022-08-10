@@ -63,7 +63,7 @@ class LibraryReadSerializer(serializers.ModelSerializer):
     class Meta:
         model = Library
         fields = ['user', 'library_name', 'photo_url', 'longitude', 'latitude']
-        read_only_fields = '__all__'
+        read_only_fields = ('__all__',)
 
     def get_user(self, obj):
         return {'username': obj.user.username, 'email': obj.user.email}

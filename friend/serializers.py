@@ -9,7 +9,7 @@ class FriendReadSerializer(serializers.Serializer):
     class Meta:
         model = Friend 
         fields = ['friendship_from', 'friendship_to', 'created_at', 'is_pending']
-        read_only_fields = '__all__'
+        read_only_fields = ('__all__',)
 
 class FriendWriteSerializer(serializers.Serializer):
     friendship_from = serializers.PrimaryKeyRelatedField(queryset=Reader.objects.all())

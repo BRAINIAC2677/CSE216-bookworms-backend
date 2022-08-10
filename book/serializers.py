@@ -12,7 +12,7 @@ class BookReadSerializer(serializers.ModelSerializer):
     class Meta:
         model = Book
         fields = ['isbn', 'title', 'description', 'photo_url', 'page_count', 'created_at', 'updated_at', 'genres', 'authors']
-        read_only_fields = '__all__'
+        read_only_fields = ('__all__',)
     
     def get_authors(self, obj):
         return [{author.user.get_full_name(), author.rid} for author in obj.authors.all()]

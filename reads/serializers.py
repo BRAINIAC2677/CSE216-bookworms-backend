@@ -10,7 +10,7 @@ class ReadsReadSerializer(serializers.Serializer):
     class Meta:
         model = Reads
         fields = ['rid','reader', 'book', 'created_at', 'updated_at', 'status']
-        read_only_fields = '__all__'
+        read_only_fields = ('__all__',)
 
 
 

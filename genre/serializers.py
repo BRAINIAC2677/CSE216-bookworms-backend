@@ -6,7 +6,7 @@ class GenreSerializer(serializers.Serializer):
     class Meta:
         model = Genre 
         fields = ['gid', 'name']
-        read_only_fields = ['gid']
+        read_only_fields = ('gid',)
         extra_kwargs = {
             'name': {
                 'required': True,

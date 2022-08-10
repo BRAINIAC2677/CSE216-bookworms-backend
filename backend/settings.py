@@ -27,7 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = str(os.getenv('SECRET_KEY'))
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['bookworms-backend77.herokuapp.com', '127.0.0.1']
 
@@ -45,8 +45,7 @@ INSTALLED_APPS = [
     # third party apps
     'rest_framework',
     'corsheaders',
-    'drf_spectacular',
-    'drf_spectacular_sidecar',
+    'drf_yasg',
 
     # local apps
     'rest_framework.authtoken',
@@ -96,19 +95,19 @@ TEMPLATES = [
     },
 ]
 
-REST_FRAEMWORK = {
-    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
-}
+# REST_FRAEMWORK = {
+#     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+# }
 
-SPECTACULAR_SETTINGS = {
-    'SWAGGER_UI_DIST': 'SIDECAR',  
-    'SWAGGER_UI_FAVICON_HREF': 'SIDECAR',
-    'REDOC_DIST': 'SIDECAR',
-    'TITLE': 'Bookworms API',
-    'DESCRIPTION': 'API for Bookworms app',
-    'VERSION': '1.0.0',
-    'SERVE_INCLUDE_SCHEMA': False,
-}
+# SPECTACULAR_SETTINGS = {
+#     'SWAGGER_UI_DIST': 'SIDECAR',  
+#     'SWAGGER_UI_FAVICON_HREF': 'SIDECAR',
+#     'REDOC_DIST': 'SIDECAR',
+#     'TITLE': 'Bookworms API',
+#     'DESCRIPTION': 'API for Bookworms app',
+#     'VERSION': '1.0.0',
+#     'SERVE_INCLUDE_SCHEMA': False,
+# }
 
 WSGI_APPLICATION = 'backend.wsgi.application'
 

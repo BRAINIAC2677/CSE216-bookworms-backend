@@ -12,7 +12,7 @@ class BookBorrowReadSerializer(serializers.Serializer):
     class Meta:
         model = BookBorrow 
         fields = ['bbid','book', 'borrowed_from','borrowed_by', 'borrowed_date', 'returned_date', 'fee']
-        read_only_fields = '__all__'
+        read_only_fields = ('__all__',)
 
 
 class BookBorrowWriteSerializer(serializers.Serializer):

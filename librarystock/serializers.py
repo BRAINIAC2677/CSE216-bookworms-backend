@@ -10,7 +10,7 @@ class LibraryStockReadSerializer(serializers.ModelSerializer):
     class Meta:
         model = LibraryStock
         fields = ['book', 'library', 'quantity', 'borrow_fee_per_day']
-        read_only_fields = '__all__'
+        read_only_fields = ('__all__',)
 
 class LibraryStockWriteSerializer(serializers.ModelSerializer):
     book = serializers.PrimaryKeyRelatedField(queryset=Book.objects.all())

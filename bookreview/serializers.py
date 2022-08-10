@@ -11,7 +11,7 @@ class BookReviewReadSerializer(serializers.ModelSerializer):
     class Meta:
         model = BookReview
         fields = ['brid', 'book', 'reviewer', 'rating', 'content', 'created_at', 'updated_at', 'love_react_count']
-        read_only_fields = '__all__'    
+        read_only_fields = ('__all__',)   
 
     def get_love_react_count(self, obj):
         return obj.loved_by.count()
