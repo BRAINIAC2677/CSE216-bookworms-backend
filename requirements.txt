@@ -9,3 +9,6 @@ whitenoise
 dj-database-url
 django-cors-headers
 drf_yasg
+pytest
+pytest-django
+model_bakery

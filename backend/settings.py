@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 from pathlib import Path
 import os
-from corsheaders.defaults import default_headers
 import dj_database_url
 from dotenv import load_dotenv
 load_dotenv()
@@ -79,9 +78,6 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:8000",
 ]
 
-CORS_ALLOW_HEADERS = list(default_headers) + [
-    "token",
-]
 
 ROOT_URLCONF = 'backend.urls'
 
