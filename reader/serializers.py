@@ -33,7 +33,7 @@ class ReaderUserSerializer(serializers.ModelSerializer):
         }
 
 
-class ReaderSerializer(serializers.ModelSerializer):
+class ReaderWriteSerializer(serializers.ModelSerializer):
     user = ReaderUserSerializer(required=True)
 
     class Meta:
@@ -52,16 +52,28 @@ class ReaderSerializer(serializers.ModelSerializer):
         return reader
 
     def update(self, instance, validated_data):
-        user_data = validated_data.pop('user')
-        user = instance.user
-        user.username = user_data.get('username', user.username)
-        user.email = user_data.get('email', user.email)
-        user.first_name = user_data.get('first_name', user.first_name)
-        user.last_name = user_data.get('last_name', user.last_name)
-        user.set_password(user_data.get('password', user.password))
-        user.save()
+        if validated_data.get('user'):
+            user_data = validated_data.pop('user')
+            user = instance.user
+            user.username = user_data.get('username', user.username)
+            user.email = user_data.get('email', user.email)
+            user.first_name = user_data.get('first_name', user.first_name)
+            user.last_name = user_data.get('last_name', user.last_name)
+            user.set_password(user_data.get('password', user.password))
+            user.save()
         instance.photo_url = validated_data.get(
             'photo_url', instance.photo_url)
         instance.bio = validated_data.get('bio', instance.bio)
         instance.save()
         return instance
+
+class ReaderReadSerializer(serializers.ModelSerializer):
+    user = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Reader
+        fields = ['rid','user','bio', 'photo_url']
+        read_only_fields = ('__all__',)
+
+    def get_user(self, obj):
+        return {'username': obj.user.username, 'first_name': obj.user.first_name,'last_name': obj.user.last_name, 'email': obj.user.email}

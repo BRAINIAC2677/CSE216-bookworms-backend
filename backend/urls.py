@@ -19,6 +19,9 @@ from django.urls import path, include, re_path
 from django.views.static import serve
 from django.conf import settings
 
+from rest_framework.authtoken.views import obtain_auth_token
+
+
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
@@ -39,6 +42,8 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/api-token-auth/', obtain_auth_token, name='api-token-auth'),
+    
     path('api/reader/', include('reader.urls')),
     path('api/genre/', include('genre.urls')),
     path('api/book/', include('book.urls')),

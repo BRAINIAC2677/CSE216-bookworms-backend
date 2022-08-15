@@ -44,12 +44,13 @@ class LibraryWriteSerializer(serializers.ModelSerializer):
         return library
 
     def update(self, instance, validated_data):
-        user_data = validated_data.pop('user')
-        user = instance.user
-        user.username = user_data.get('username', user.username)
-        user.email = user_data.get('email', user.email)
-        user.set_password(user_data.get('password', user.password))
-        user.save()
+        if validated_data.get('user'):
+            user_data = validated_data.pop('user')
+            user = instance.user
+            user.username = user_data.get('username', user.username)
+            user.email = user_data.get('email', user.email)
+            user.set_password(user_data.get('password', user.password))
+            user.save()
         instance.library_name = validated_data.get('library_name', instance.library_name)
         instance.photo_url = validated_data.get('photo_url', instance.photo_url)
         instance.longitude = validated_data.get('longitude', instance.longitude)
@@ -62,7 +63,7 @@ class LibraryReadSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Library
-        fields = ['user', 'library_name', 'photo_url', 'longitude', 'latitude']
+        fields = ['lid','user','library_name', 'photo_url', 'longitude', 'latitude']
         read_only_fields = ('__all__',)
 
     def get_user(self, obj):

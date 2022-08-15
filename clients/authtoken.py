@@ -17,7 +17,7 @@ import json
 # response = requests.post(endpoint, json = data)
 # print(response.status_code)
 
-endpoint = 'http://127.0.0.1:8000/api/reader/api-token-auth/'
+endpoint = 'http://127.0.0.1:8000/api/api-token-auth/'
 
 data = {
     'username': 'b',

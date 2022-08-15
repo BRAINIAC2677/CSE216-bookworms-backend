@@ -1,4 +1,5 @@
-import pytest 
+import pytest
+from model_bakery import baker  
 from rest_framework.test import APIClient
 
 
@@ -13,7 +14,7 @@ def reader_apiauth_token(api_client):
             'username': 'pytestreader',
             'first_name': 'pytest',
             'last_name': 'reader',
-            'email': 'test@gmail.com',
+            'email': 'pytestreader@gmail.com',
             'password': 'pytest',
         }
     }
@@ -22,7 +23,30 @@ def reader_apiauth_token(api_client):
         'username': 'pytestreader',
         'password': 'pytest'
     }
-    response = api_client.post('/api/reader/api-token-auth/', data = data, format='json')
+    response = api_client.post('/api/api-token-auth/', data = data, format='json')
     yield response.data['token']
     api_client.delete('/api/reader/delete/', HTTP_AUTHORIZATION='Token ' + response.data['token'])
+
+@pytest.fixture
+def library_apiauth_token(api_client):
+    baked_library = baker.prepare('library.Library', user__email='pytestlibrary@gmail.com')
+    data = {
+        'user':{
+            'username': baked_library.user.username,
+            'email': baked_library.user.email,
+            'password': baked_library.user.password,
+        },
+        'library_name': baked_library.library_name,
+        'photo_url': baked_library.photo_url,
+        'longitude': baked_library.longitude,
+        'latitude': baked_library.latitude
+    }
+    response = api_client.post('/api/library/register/', data = data, format='json')
+    data = {
+        'username': baked_library.user.username,
+        'password': baked_library.user.password
+    }
+    response = api_client.post('/api/api-token-auth/', data = data, format='json')
+    yield response.data['token']
+    api_client.delete('/api/library/delete/', HTTP_AUTHORIZATION='Token ' + response.data['token'])
     

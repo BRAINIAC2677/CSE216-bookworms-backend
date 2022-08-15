@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 class Library(models.Model):
     lid = models.AutoField(primary_key=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    library_name = models.CharField(max_length=200, blank=True, null=True)
+    library_name = models.CharField(max_length=200)
     photo_url = models.CharField(max_length=200, blank=True, null=True)
     longitude = models.FloatField()
     latitude = models.FloatField()

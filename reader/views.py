@@ -3,46 +3,53 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 
 from .models import Reader
-from .serializers import ReaderSerializer
+from .serializers import ReaderWriteSerializer, ReaderReadSerializer
 from .permissions import IsReaderAccountOwnerPermission
 
 
 class ReaderRegisterAPIView(CreateAPIView):
-    serializer_class = ReaderSerializer
+    serializer_class = ReaderWriteSerializer
     permission_classes = [AllowAny]
 
 
-class ReaderListView(ListAPIView):
-    permission_classes = [IsAdminUser]
+class ReaderListAPIView(ListAPIView):
     queryset = Reader.objects.all()
-    serializer_class = ReaderSerializer
+    serializer_class = ReaderReadSerializer
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
 
 
-class ReaderDetailView(RetrieveAPIView):
+class MyReaderDetailAPIView(RetrieveAPIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated, IsReaderAccountOwnerPermission]
     queryset = Reader.objects.all()
-    serializer_class = ReaderSerializer
+    serializer_class = ReaderReadSerializer
+
+    def get_object(self):
+        return self.request.user.reader
+
+class ReaderDetailAPIView(RetrieveAPIView):
+    queryset = Reader.objects.all()
+    serializer_class = ReaderReadSerializer
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    lookup_field = 'rid'
+
+
+class ReaderUpdateAPIView(UpdateAPIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated, IsReaderAccountOwnerPermission]
+    queryset = Reader.objects.all()
+    serializer_class = ReaderWriteSerializer
 
     def get_object(self):
         return self.request.user.reader
 
 
-class ReaderUpdateView(UpdateAPIView):
+class ReaderDeleteAPIView(DestroyAPIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated, IsReaderAccountOwnerPermission]
     queryset = Reader.objects.all()
-    serializer_class = ReaderSerializer
-
-    def get_object(self):
-        return self.request.user.reader
-
-
-class ReaderDeleteView(DestroyAPIView):
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated, IsReaderAccountOwnerPermission]
-    queryset = Reader.objects.all()
-    serializer_class = ReaderSerializer
 
     def get_object(self):
         return self.request.user.reader
