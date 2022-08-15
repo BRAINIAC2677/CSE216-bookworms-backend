@@ -2,6 +2,8 @@ import pytest
 from model_bakery import baker  
 from rest_framework.test import APIClient
 
+from django.contrib.auth.models import User 
+
 
 @pytest.fixture
 def api_client():
@@ -49,4 +51,27 @@ def library_apiauth_token(api_client):
     response = api_client.post('/api/api-token-auth/', data = data, format='json')
     yield response.data['token']
     api_client.delete('/api/library/delete/', HTTP_AUTHORIZATION='Token ' + response.data['token'])
+
+@pytest.fixture
+def admin_reader_apiauth_token(api_client):
+    data = {
+        'user':{
+            'username': 'pytestadmin-reader',
+            'first_name': 'pytest',
+            'last_name': 'admin-reader',
+            'email': 'pytestadmin-reader@gmail.com',
+            'password': 'pytest',
+        }
+    }
+    response = api_client.post('/api/reader/register/', data = data, format='json')
+    user = User.objects.get(username='pytestadmin-reader')
+    user.is_staff = True
+    user.save()
     
+    data = {
+        'username': 'pytestadmin-reader',
+        'password': 'pytest'
+    }
+    response = api_client.post('/api/api-token-auth/', data = data, format='json')
+    yield response.data['token']
+    api_client.delete('/api/reader/delete/', HTTP_AUTHORIZATION='Token ' + response.data['token'])

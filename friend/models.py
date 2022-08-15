@@ -13,10 +13,10 @@ class Friend(models.Model):
         db_table = 'friend'
         
     def __str__(self):
-        return {
+        return str({
             'friendship_from': self.friendship_from.user.username,
             'friendship_to': self.friendship_to.user.username,
             'created_at': self.created_at,
             'is_pending': self.is_pending,
-        }
+        })
     

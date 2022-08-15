@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+
 class Reader(models.Model):
     rid = models.AutoField(primary_key=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -11,14 +12,7 @@ class Reader(models.Model):
         db_table = 'reader'
         
     def __str__(self):
-        return {
-            'username': self.user.username,
-            'first_name': self.user.first_name,
-            'last_name': self.user.last_name,
-            'email': self.user.email,
-            'photo_url': self.photo_url,
-            'bio': self.bio,
-        }
+        return self.user.username
 
 
 

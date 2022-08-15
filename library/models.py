@@ -14,11 +14,11 @@ class Library(models.Model):
         db_table = 'library'
         
     def __str__(self):
-        return {
+        return str({
             'username': self.user.username,
             'library_name': self.library_name,
             'photo_url': self.photo_url,
             'longitude': self.longitude,
             'latitude': self.latitude,
-        }
+        })
     

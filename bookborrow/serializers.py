@@ -6,13 +6,22 @@ from library.models import Library
 from reader.models import Reader
 
 class BookBorrowReadSerializer(serializers.Serializer):
-    book = serializers.StringRelatedField()
-    borrowed_by = serializers.StringRelatedField()
-    borrowed_from = serializers.StringRelatedField()
+    book = serializers.SerializerMethodField()
+    borrowed_by = serializers.SerializerMethodField()
+    borrowed_from = serializers.SerializerMethodField()
     class Meta:
         model = BookBorrow 
         fields = ['bbid','book', 'borrowed_from','borrowed_by', 'borrowed_date', 'returned_date', 'fee']
         read_only_fields = ('__all__',)
+    
+    def get_book(self, obj):
+        return {'isbn': obj.book.isbn, 'title': obj.book.title}
+    
+    def get_borrowed_by(self, obj):
+        return {'rid': obj.borrowed_by.rid, 'name': obj.borrowed_by.user.get_full_name()}
+    
+    def get_borrowed_from(self, obj):
+        return {'lid': obj.borrowed_from.lid, 'name': obj.borrowed_from.name}
 
 
 class BookBorrowWriteSerializer(serializers.Serializer):

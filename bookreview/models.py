@@ -17,11 +17,11 @@ class BookReview(models.Model):
         db_table = 'book_review'
 
     def __str__(self):
-        return {
+        return str({
             'book': self.book.title,
             'reviewer': self.reviewer.user.username,
             'rating': self.rating,
             'created_at': self.created_at,
             'updated_at': self.updated_at,
-        }
+        })
 

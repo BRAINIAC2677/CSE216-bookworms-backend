@@ -20,11 +20,11 @@ class Reads(models.Model):
         db_table = 'reads'
         
     def __str__(self):
-        return {
+        return str({
             'reader': self.reader.user.username,
             'book': self.book.title,
             'created_at': self.created_at,
             'updated_at': self.updated_at,
             'status': self.status,
-        }
+        })
     

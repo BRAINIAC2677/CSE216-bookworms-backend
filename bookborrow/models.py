@@ -17,13 +17,13 @@ class BookBorrow(models.Model):
         db_table = 'book_borrow'
         
     def __str__(self):
-        return {
+        return str({
             'book': self.book.title,
             'borrowed_from': self.borrowed_from.library_name,
             'borrowed_by': self.borrowed_by.user.username,
             'borrowed_date': self.borrowed_date,
             'returned_date': self.returned_date,
             'fee': self.fee,
-        }
+        })
     
 

@@ -18,7 +18,7 @@ class Book(models.Model):
         db_table = 'book'
         
     def __str__(self):
-        return {
+        return str({
             'isbn': self.isbn,
             'title': self.title,
             'description': self.description,
@@ -28,5 +28,5 @@ class Book(models.Model):
             'updated_at': self.updated_at,
             'genres': self.genres.all(),
             'authors': self.authors.all(),
-        }
+        })
     
