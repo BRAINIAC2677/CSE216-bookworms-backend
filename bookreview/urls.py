@@ -1,11 +1,12 @@
 from django.urls import path 
 
-from .views import BookReviewListAPIView, BookReviewDetailAPIView, BookReviewCreateAPIView, BookReviewUpdateAPIView, BookReviewDeleteAPIView
+from .views import BookReviewListAPIView, BookReviewDetailAPIView, BookReviewCreateAPIView, BookReviewUpdateAPIView, BookReviewDeleteAPIView, BookReviewUpdateLovedByAPIView
 
 urlpatterns = [ 
-    path('', BookReviewListAPIView.as_view(), name='bookreview-list'),
-    path('<int:brid>/', BookReviewDetailAPIView.as_view(), name='bookreview-detail'),
+    path('list/', BookReviewListAPIView.as_view(), name='bookreview-list'),
+    path('detail/<int:brid>/', BookReviewDetailAPIView.as_view(), name='bookreview-detail'),
     path('create/', BookReviewCreateAPIView.as_view(), name='bookreview-create'),
-    path('<int:brid>/update/', BookReviewUpdateAPIView.as_view(), name='bookreview-update'),
+    path('update/<int:brid>/', BookReviewUpdateAPIView.as_view(), name='bookreview-update'),
+    path('update/lovedby/<int:brid>/', BookReviewUpdateLovedByAPIView.as_view(), name='bookreview-update-lovedby'),
     path('<int:brid>/delete/', BookReviewDeleteAPIView.as_view(), name='bookreview-delete'),
 ]

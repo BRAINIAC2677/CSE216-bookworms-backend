@@ -38,7 +38,7 @@ class ReaderWriteSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Reader
-        fields = ['user', 'photo_url', 'bio']
+        fields = ['rid','user', 'photo_url', 'bio']
 
     def create(self, validated_data):
         user_data = validated_data.pop('user')

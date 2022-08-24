@@ -5,7 +5,7 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 # Create your views here.
 from .models import BookReview 
-from .serializers import BookReviewReadSerializer, BookReviewWriteSerializer, BookReviewLoveSerializer
+from .serializers import BookReviewReadSerializer, BookReviewWriteSerializer, BookReviewLoveSerializer, BookReviewUpdateSerializer
 from .permissions import IsBookReviewerPermission
 
 class BookReviewListAPIView(ListAPIView):
@@ -27,12 +27,15 @@ class BookReviewUpdateAPIView(UpdateAPIView):
     queryset = BookReview.objects.all()
     lookup_field = 'brid'
     authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsBookReviewerPermission]
+    serializer_class = BookReviewUpdateSerializer
 
-    def get_serializer_class(self):
-        if self.request.user.reader == self.get_object().reviewer:
-            return BookReviewWriteSerializer
-        return BookReviewLoveSerializer
+class BookReviewUpdateLovedByAPIView(UpdateAPIView):
+    queryset = BookReview.objects.all()
+    lookup_field = 'brid'
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    serializer_class = BookReviewLoveSerializer
 
 class BookReviewDeleteAPIView(DestroyAPIView):
     queryset = BookReview.objects.all()
