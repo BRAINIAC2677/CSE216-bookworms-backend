@@ -3,7 +3,7 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 
 from .models import LibraryStock
-from .serializers import LibraryStockReadSerializer, LibraryStockWriteSerializer
+from .serializers import LibraryStockReadSerializer, LibraryStockWriteSerializer, LibraryStockUpdateSerializer
 from .permissions import IsLibraryStockOwnerPermission
 
 class LibraryStockListAPIView(ListAPIView):
@@ -12,13 +12,14 @@ class LibraryStockListAPIView(ListAPIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
+#todo: only library user can access this view
 class MyLibraryStockListAPIView(ListAPIView):
     serializer_class = LibraryStockReadSerializer
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated, IsLibraryStockOwnerPermission]
     
     def get_queryset(self):
-        return self.queryset.filter(library=self.request.user.library)
+        return LibraryStock.objects.all().filter(library=self.request.user.library)
 
 class LibraryStockDetailAPIView(RetrieveAPIView):
     queryset = LibraryStock.objects.all()
@@ -27,6 +28,7 @@ class LibraryStockDetailAPIView(RetrieveAPIView):
     permission_classes = [IsAuthenticated]
     lookup_field = 'lsid'
 
+#todo: permit only library account to create library stock
 class LibraryStockCreateAPIView(CreateAPIView):
     queryset = LibraryStock.objects.all()
     serializer_class = LibraryStockWriteSerializer
@@ -35,7 +37,7 @@ class LibraryStockCreateAPIView(CreateAPIView):
 
 class LibraryStockUpdateAPIView(UpdateAPIView):
     queryset = LibraryStock.objects.all()
-    serializer_class = LibraryStockWriteSerializer
+    serializer_class = LibraryStockUpdateSerializer
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated, IsLibraryStockOwnerPermission]
     lookup_field = 'lsid'

@@ -14,6 +14,7 @@ class Friend(models.Model):
         
     def __str__(self):
         return str({
+            'fid': self.fid,
             'friendship_from': self.friendship_from.user.username,
             'friendship_to': self.friendship_to.user.username,
             'created_at': self.created_at,

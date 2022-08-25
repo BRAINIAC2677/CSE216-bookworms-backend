@@ -1,3 +1,4 @@
+import datetime 
 from rest_framework import serializers
 
 from .models import BookBorrow
@@ -15,23 +16,23 @@ class BookBorrowReadSerializer(serializers.Serializer):
         read_only_fields = ('__all__',)
     
     def get_book(self, obj):
-        return {'isbn': obj.book.isbn, 'title': obj.book.title}
-    
+        return {'isbn': obj.book.isbn}
+
     def get_borrowed_by(self, obj):
-        return {'rid': obj.borrowed_by.rid, 'name': obj.borrowed_by.user.get_full_name()}
+        return {'rid': obj.borrowed_by.rid}
     
     def get_borrowed_from(self, obj):
-        return {'lid': obj.borrowed_from.lid, 'name': obj.borrowed_from.name}
+        return {'lid': obj.borrowed_from.lid}
 
 
-class BookBorrowWriteSerializer(serializers.Serializer):
+class BookBorrowWriteSerializer(serializers.ModelSerializer):
     book = serializers.PrimaryKeyRelatedField(queryset=Book.objects.all())
     borrowed_from = serializers.PrimaryKeyRelatedField(queryset=Library.objects.all())
     borrowed_by = serializers.PrimaryKeyRelatedField(queryset=Reader.objects.all())
     class Meta:
         model = BookBorrow
-        fields = ['book', 'borrowed_from','borrowed_by', 'returned_date', 'fee']
-        write_only_fields = '__all__'
+        fields = ['bbid', 'book', 'borrowed_from','borrowed_by', 'returned_date', 'fee']
+        read_only_fields = ('bbid',)
         extra_kwargs = {
             'book':{
                 'required':True,
@@ -49,3 +50,11 @@ class BookBorrowWriteSerializer(serializers.Serializer):
                 'required':True,
             },
         }
+
+    def validate_returned_date(self, value):
+        #check if value is a datetime value
+        if not isinstance(value, datetime.datetime):
+            raise serializers.ValidationError('Returned date must be a datetime value')
+
+    def create(self, validated_data):
+        return BookBorrow.objects.create(**validated_data)

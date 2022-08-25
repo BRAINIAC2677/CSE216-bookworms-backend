@@ -15,7 +15,7 @@ class FriendListAPIView(ListAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Friend.objects.filter(Q(friendshi_from__exact=self.request.user) | Q(friendship_to__exact=self.request.user), Q(is_pending__exact=False))
+        return Friend.objects.filter(Q(friendship_from__exact=self.request.user) | Q(friendship_to__exact=self.request.user), Q(is_pending__exact=False))
 
 class PendingFriendListAPIView(ListAPIView):
     serializer_class = FriendReadSerializer

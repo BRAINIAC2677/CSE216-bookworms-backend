@@ -18,8 +18,8 @@ class LibraryStockWriteSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = LibraryStock
-        fields = ['book', 'library', 'quantity', 'borrow_fee_per_day']
-        write_only_fields = '__all__'
+        fields = ['lsid', 'book','library', 'quantity', 'borrow_fee_per_day']
+        read_only_fields = ('lsid',)
         extra_kwargs = {
             'borrow_fee_per_day': {
                 'required': True,
@@ -35,11 +35,29 @@ class LibraryStockWriteSerializer(serializers.ModelSerializer):
             },
         }
 
-        def validate(self, attrs):
-            if attrs['quantity'] < 0:
+        def validate_quantity(self, value):
+            if value < 0:
                 raise serializers.ValidationError("Quantity cannot be negative")
-            if attrs['borrow_fee_per_day'] < 0:
-                raise serializers.ValidationError("Borrow fee cannot be negative")
-            if LibraryStock.objects.filter(library=attrs['library'], book=attrs['book']).exists():
-                raise serializers.ValidationError("Library stock with same library and book already exists")
-            return attrs
+            return value
+
+        def create(self, validated_data):
+            return LibraryStock.objects.create(**validated_data)
+
+
+class LibraryStockUpdateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = LibraryStock
+        fields = ['lsid','quantity', 'borrow_fee_per_day']
+        read_only_fields = ('lsid',)
+
+        def validate_quantity(self, value):
+            if value < 0:
+                raise serializers.ValidationError("Quantity cannot be negative")
+            return value
+
+        def update(self, instance, validated_data):
+            instance.quantity = validated_data.get('quantity', instance.quantity)
+            instance.borrow_fee_per_day = validated_data.get('borrow_fee_per_day', instance.borrow_fee_per_day)
+            instance.save()
+            return instance

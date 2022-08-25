@@ -80,6 +80,33 @@ def library_apiauth_token(api_client):
     api_client.delete('/api/library/delete/', HTTP_AUTHORIZATION='Token ' + response.data['token'])
 
 @pytest.fixture
+def registered_library(api_client):
+    baked_library = baker.prepare('library.Library', user__email='pytestlibrary@gmail.com')
+    reg_data = {
+        'user':{
+            'username': baked_library.user.username,
+            'email': baked_library.user.email,
+            'password': baked_library.user.password,
+        },
+        'library_name': baked_library.library_name,
+        'photo_url': baked_library.photo_url,
+        'longitude': baked_library.longitude,
+        'latitude': baked_library.latitude
+    }
+    reg_endpoint = '/api/library/register/'
+    reg_response = api_client.post(reg_endpoint, data = reg_data, format = 'json')
+    reg_data['lid'] = reg_response.data['lid']
+    token_data = {
+        'username': reg_data['user']['username'],
+        'password': reg_data['user']['password']
+    }
+    token_response = api_client.post('/api/api-token-auth/', data = token_data, format = 'json')
+    reg_data['token'] = token_response.data['token']
+    yield reg_data
+    api_client.delete('/api/library/delete/', HTTP_AUTHORIZATION='Token ' + reg_data['token'])
+ 
+
+@pytest.fixture
 def admin_reader_apiauth_token(api_client):
     data = {
         'user':{

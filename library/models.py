@@ -15,6 +15,7 @@ class Library(models.Model):
         
     def __str__(self):
         return str({
+            'lid': self.lid,
             'username': self.user.username,
             'library_name': self.library_name,
             'photo_url': self.photo_url,

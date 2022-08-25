@@ -29,8 +29,8 @@ class LibraryWriteSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Library
-        fields = ['user', 'library_name', 'photo_url', 'longitude', 'latitude']
-        write_only_fields = '__all__'
+        fields = ['lid', 'user', 'library_name', 'photo_url', 'longitude', 'latitude']
+        read_only_fields = ('lid',)
 
     def create(self, validated_data):
         user_data = validated_data.pop('user')
