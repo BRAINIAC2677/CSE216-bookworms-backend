@@ -21,7 +21,7 @@ class ReaderListAPIView(ListAPIView):
 
 class MyReaderDetailAPIView(RetrieveAPIView):
     authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated, IsReaderAccountOwnerPermission]
+    permission_classes = [IsAuthenticated]
     queryset = Reader.objects.all()
     serializer_class = ReaderReadSerializer
 
@@ -35,10 +35,9 @@ class ReaderDetailAPIView(RetrieveAPIView):
     permission_classes = [IsAuthenticated]
     lookup_field = 'rid'
 
-
 class ReaderUpdateAPIView(UpdateAPIView):
     authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated, IsReaderAccountOwnerPermission]
+    permission_classes = [IsAuthenticated]
     queryset = Reader.objects.all()
     serializer_class = ReaderWriteSerializer
 
@@ -48,7 +47,7 @@ class ReaderUpdateAPIView(UpdateAPIView):
 
 class ReaderDeleteAPIView(DestroyAPIView):
     authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated, IsReaderAccountOwnerPermission]
+    permission_classes = [IsAuthenticated]
     queryset = Reader.objects.all()
 
     def get_object(self):
