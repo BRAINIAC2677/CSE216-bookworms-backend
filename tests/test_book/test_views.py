@@ -7,11 +7,26 @@ class TestBookAPIViewEndpoints:
 
     endpoint = '/api/book/'
 
-    def test_list(self, api_client):
-        baker.make('book.Book', _quantity=3)
-        response = api_client.get(self.endpoint + 'list/')
-        assert response.status_code == 200
-        assert len(response.data) == 3
+    @pytest.mark.parametrize('test_param_id',[1, 2])
+    def test_list(self, api_client, test_param_id, registered_reader):
+        baked_books = baker.make('book.Book', _quantity=1)
+        print(baked_books)
+        if test_param_id == 1:
+            query_data = {
+                'isbn': baked_books[0].isbn,
+                'title': baked_books[0].title,
+                'gte_page_count': baked_books[0].page_count,
+                'lte_page_count': baked_books[0].page_count,
+                'genre_ids': [1],
+                'author_ids': baked_books[0].authors.all(),
+            }
+        else:
+            query_data = {}
+        print(f'query_data:\n{query_data}')
+        list_response = api_client.get(self.endpoint + 'list/', HTTP_AUTHORIZATION='Token ' + registered_reader['token'], data=query_data)
+        print(list_response.data)
+        assert list_response.status_code == 200
+        assert 1 == 2
 
     def test_create(self, api_client, admin_reader_apiauth_token):
         baked_book = baker.prepare('book.Book', page_count = 2677)

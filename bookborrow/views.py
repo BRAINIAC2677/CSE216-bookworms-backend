@@ -8,18 +8,32 @@ from .serializers import BookBorrowReadSerializer, BookBorrowWriteSerializer
 from .models import BookBorrow
 
 class BookBorrowListAPIView(ListAPIView):
-    queryset = BookBorrow.objects.all()
     serializer_class = BookBorrowReadSerializer
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated, IsAdminUser]
 
-class ReaderBookBorrowListAPIView(ListAPIView):
+    def get_queryset(self):
+        return BookBorrow.objects.all()
+
+class BookBorrowQueryListAPIView(ListAPIView):
     serializer_class = BookBorrowReadSerializer
     authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated, IsReaderUserPermission]
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return BookBorrow.objects.filter(borrowed_by=self.request.user.reader)
+        if self.request.query_params.get('borrowed_by_id') and self.request.query_params.get('borrowed_from_id'):
+            borrowed_by_id = self.request.query_params.get('borrowed_by_id')
+            borrowed_from_id = self.request.query_params.get('borrowed_from_id')
+            return BookBorrow.objects.raw('SELECT * FROM book_borrow WHERE borrowed_by_id = %s AND borrowed_from_id = %s', [borrowed_by_id, borrowed_from_id])
+        elif self.request.query_params.get('borrowed_by_id'):
+            borrowed_by_id = self.request.query_params.get('borrowed_by_id')
+            return BookBorrow.objects.raw('SELECT * FROM book_borrow WHERE borrowed_by_id = %s', [borrowed_by_id])
+        elif self.request.query_params.get('borrowed_from_id'):
+            borrowed_from_id = self.request.query_params.get('borrowed_from_id')
+            return BookBorrow.objects.raw('SELECT * FROM book_borrow WHERE borrowed_from_id = %s', [borrowed_from_id])
+        else:
+            # returns empty queryset
+            return BookBorrow.objects.none()
 
 class LibraryBookBorrowListAPIView(ListAPIView):
     serializer_class = BookBorrowReadSerializer

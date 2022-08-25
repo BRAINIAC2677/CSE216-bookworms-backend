@@ -14,6 +14,32 @@ class TestBookBorrowAPIViewEndpoints:
         print(list_response.data)
         assert list_response.status_code == 200
 
+    @pytest.mark.parametrize('test_param_id', [1, 2, 3, 4])
+    def test_querylist(self, api_client, test_param_id, registered_reader):
+        baked_bookborrow = baker.make('bookborrow.BookBorrow')
+        print(baked_bookborrow)
+        if test_param_id == 1:
+            query_data = {
+                'borrowed_by_id': registered_reader['rid'],
+            }
+        elif test_param_id == 2:
+            query_data = {
+                'borrowed_from_id': baked_bookborrow.borrowed_from.lid,
+            }
+        elif test_param_id == 3:
+            query_data = {
+                'borrowed_by_id': baked_bookborrow.borrowed_by.rid,
+                'borrowed_from_id': baked_bookborrow.borrowed_from.lid,
+            }
+        elif test_param_id == 4:
+            query_data = {}
+            
+        list_response = api_client.get(self.endpoint + 'querylist/', format='json', HTTP_AUTHORIZATION='Token ' + registered_reader['token'], data=query_data)
+        print(list_response.data)
+        assert list_response.status_code == 200
+        
+
+
     def test_create(self, api_client, registered_reader):
         baked_book = baker.make('book.Book')
         baked_library = baker.make('library.Library')
