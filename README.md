@@ -8,3 +8,4 @@
 - [Deploying Django App on Heroku](https://www.geeksforgeeks.org/how-to-deploy-django-application-on-heroku/)
 
 ## **Relevant QnA:**
+- [What are the advantages of storing info in .env files](https://stackoverflow.com/questions/53413265/what-are-the-advantages-of-storing-info-on-env-files-as-opposed-to-php-files#:~:text=Env%20vars%20are%20easy%20to,%2D%20and%20OS%2Dagnostic%20standard.)
