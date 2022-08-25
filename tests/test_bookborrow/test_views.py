@@ -46,7 +46,7 @@ class TestBookBorrowAPIViewEndpoints:
         print(baked_book)
         print(baked_library)
         create_data = {
-            'book': baked_book.isbn,
+            'book': baked_book.id,
             'borrowed_from': baked_library.lid,
             'borrowed_by': registered_reader['rid'],
             'returned_date': '2030-01-01',
@@ -60,7 +60,7 @@ class TestBookBorrowAPIViewEndpoints:
         baked_book = baker.make('book.Book')
         print(baked_book)
         create_data = {
-            'book': baked_book.isbn,
+            'book': baked_book.id,
             'borrowed_from': registered_library['lid'],
             'borrowed_by': registered_reader['rid'],
             'returned_date': '2030-01-01',

@@ -25,7 +25,7 @@ class TestReadsAPIViewEndpoints:
         baked_book = baker.make('book.Book')
         create_data = {
             'reader': registered_reader['rid'],
-            'book': baked_book.isbn,
+            'book': baked_book.id,
             'status': 'w',
         } 
         create_response = api_client.post(self.endpoint + 'create/', create_data, format='json', HTTP_AUTHORIZATION= 'Token ' + registered_reader['token'])
@@ -36,7 +36,7 @@ class TestReadsAPIViewEndpoints:
         baked_book = baker.make('book.Book')
         create_data = {
             'reader': registered_reader['rid'],
-            'book': baked_book.isbn,
+            'book': baked_book.id,
             'status': 'w',
         } 
         create_response = api_client.post(self.endpoint + 'create/', create_data, format='json', HTTP_AUTHORIZATION= 'Token ' + registered_reader['token'])
@@ -52,7 +52,7 @@ class TestReadsAPIViewEndpoints:
         baked_book = baker.make('book.Book')
         create_data = {
             'reader': registered_reader['rid'],
-            'book': baked_book.isbn,
+            'book': baked_book.id,
             'status': 'w',
         } 
         create_response = api_client.post(self.endpoint + 'create/', create_data, format='json', HTTP_AUTHORIZATION= 'Token ' + registered_reader['token'])

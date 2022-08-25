@@ -16,7 +16,7 @@ class BookBorrowReadSerializer(serializers.Serializer):
         read_only_fields = ('__all__',)
     
     def get_book(self, obj):
-        return {'isbn': obj.book.isbn}
+        return {'id': obj.book.id}
 
     def get_borrowed_by(self, obj):
         return {'rid': obj.borrowed_by.rid}

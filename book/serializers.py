@@ -11,7 +11,7 @@ class BookReadSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Book
-        fields = ['isbn', 'title', 'description', 'photo_url', 'page_count', 'created_at', 'updated_at', 'genres', 'authors']
+        fields = ['id', 'title', 'description', 'photo_url', 'page_count', 'created_at', 'updated_at', 'genres', 'authors']
         read_only_fields = ('__all__',)
     
     def get_genres(self, obj):
@@ -23,13 +23,13 @@ class BookReadSerializer(serializers.ModelSerializer):
 
 
 class BookWriteSerializer(serializers.ModelSerializer):
-    isbn = serializers.CharField(max_length=13,required=True, validators=[UniqueValidator(queryset=Book.objects.all())])
+    id = serializers.CharField(max_length=13,required=True, validators=[UniqueValidator(queryset=Book.objects.all())])
     genres = serializers.PrimaryKeyRelatedField(many = True, queryset = Genre.objects.all())
     authors = serializers.PrimaryKeyRelatedField(many = True, queryset = Reader.objects.all())
 
     class Meta:
         model = Book 
-        fields = ['isbn','title', 'description','photo_url','page_count', 'genres', 'authors']
+        fields = ['id','title', 'description','photo_url','page_count', 'genres', 'authors']
         write_only_fields = '__all__'
         extra_kwargs = {
             'title': {
@@ -59,7 +59,7 @@ class BookWriteSerializer(serializers.ModelSerializer):
         if validated_data.get('authors'):
             book_authors = validated_data.pop('authors')
             instance.authors.set(book_authors)
-        instance.isbn = validated_data.get('isbn', instance.isbn)
+        instance.id = validated_data.get('id', instance.id)
         instance.title = validated_data.get('title', instance.title)
         instance.description = validated_data.get('description', instance.description)
         instance.photo_url = validated_data.get('photo_url', instance.photo_url)
