@@ -9,6 +9,7 @@ from .models import Book
 from .serializers import BookReadSerializer, BookWriteSerializer
 
 class BookListAPIView(ListAPIView):
+    queryset = Book.objects.all()
     serializer_class = BookReadSerializer
     # authentication_classes = [TokenAuthentication]
     # permission_classes = [IsAuthenticated]
