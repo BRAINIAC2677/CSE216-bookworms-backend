@@ -7,12 +7,19 @@ class TestLibraryStockAPIViewEndpoints:
 
     endpoint = '/api/librarystock/'
 
-    def test_list(self, api_client, reader_apiauth_token):
-        list_response = api_client.get(self.endpoint + 'list/', HTTP_AUTHORIZATION='Token ' + reader_apiauth_token)
-        assert list_response.status_code == 200
-
-    def test_mylist(self, api_client, library_apiauth_token):
-        list_response = api_client.get(self.endpoint + 'my-list/', HTTP_AUTHORIZATION='Token ' + library_apiauth_token)
+    @pytest.mark.parametrize('test_param_id', [1, 2])
+    def test_list(self, api_client, registered_library, test_param_id):
+        baked_librarystock = baker.make('librarystock.LibraryStock')
+        print(f'baked_librarystock:\n{baked_librarystock}')
+        if test_param_id == 1:
+            query_data = {
+                'lid': baked_librarystock.library.lid
+            }
+        else:
+            query_data = {}
+        print(f'query_data:\n{query_data}')
+        list_response = api_client.get(self.endpoint + 'list/', HTTP_AUTHORIZATION='Token ' + registered_library['token'], data = query_data)
+        print(f'list_response.data:\n{list_response.data}')
         assert list_response.status_code == 200
 
     def test_detail(self, api_client, registered_library):

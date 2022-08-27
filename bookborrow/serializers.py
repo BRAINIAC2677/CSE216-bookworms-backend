@@ -6,7 +6,7 @@ from book.models import Book
 from library.models import Library
 from reader.models import Reader
 
-class BookBorrowReadSerializer(serializers.Serializer):
+class BookBorrowReadSerializer(serializers.ModelSerializer):
     book = serializers.SerializerMethodField()
     borrowed_by = serializers.SerializerMethodField()
     borrowed_from = serializers.SerializerMethodField()
@@ -24,8 +24,7 @@ class BookBorrowReadSerializer(serializers.Serializer):
     def get_borrowed_from(self, obj):
         return {'lid': obj.borrowed_from.lid}
 
-
-class BookBorrowWriteSerializer(serializers.ModelSerializer):
+class BookBorrowCreateSerializer(serializers.ModelSerializer):
     book = serializers.PrimaryKeyRelatedField(queryset=Book.objects.all())
     borrowed_from = serializers.PrimaryKeyRelatedField(queryset=Library.objects.all())
     borrowed_by = serializers.PrimaryKeyRelatedField(queryset=Reader.objects.all())

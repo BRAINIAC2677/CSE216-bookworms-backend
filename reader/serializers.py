@@ -32,8 +32,18 @@ class ReaderUserSerializer(serializers.ModelSerializer):
             },
         }
 
+class ReaderReadSerializer(serializers.ModelSerializer):
+    user = serializers.SerializerMethodField()
 
-class ReaderWriteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Reader
+        fields = ['rid','user','bio', 'photo_url']
+        read_only_fields = ('__all__',)
+
+    def get_user(self, obj):
+        return {'username': obj.user.username, 'first_name': obj.user.first_name,'last_name': obj.user.last_name, 'email': obj.user.email}
+
+class ReaderCreateSerializer(serializers.ModelSerializer):
     user = ReaderUserSerializer(required=True)
 
     class Meta:
@@ -51,6 +61,13 @@ class ReaderWriteSerializer(serializers.ModelSerializer):
         user.save()
         return reader
 
+class ReaderUpdateSerializer(serializers.ModelSerializer):
+    user = ReaderUserSerializer()
+
+    class Meta:
+        model = Reader
+        fields = ['rid','user', 'photo_url', 'bio']
+
     def update(self, instance, validated_data):
         if validated_data.get('user'):
             user_data = validated_data.pop('user')
@@ -61,19 +78,8 @@ class ReaderWriteSerializer(serializers.ModelSerializer):
             user.last_name = user_data.get('last_name', user.last_name)
             user.set_password(user_data.get('password', user.password))
             user.save()
-        instance.photo_url = validated_data.get(
-            'photo_url', instance.photo_url)
+        instance.photo_url = validated_data.get('photo_url', instance.photo_url)
         instance.bio = validated_data.get('bio', instance.bio)
         instance.save()
         return instance
 
-class ReaderReadSerializer(serializers.ModelSerializer):
-    user = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Reader
-        fields = ['rid','user','bio', 'photo_url']
-        read_only_fields = ('__all__',)
-
-    def get_user(self, obj):
-        return {'username': obj.user.username, 'first_name': obj.user.first_name,'last_name': obj.user.last_name, 'email': obj.user.email}

@@ -5,23 +5,28 @@ from reader.models import Reader
 from .models import BookReview
 
 class BookReviewReadSerializer(serializers.ModelSerializer):
-    reviewer = serializers.StringRelatedField()
-    book = serializers.StringRelatedField()
+    reviewer = serializers.SerializerMethodField()
+    book = serializers.SerializerMethodField()
     love_react_count = serializers.SerializerMethodField()
     class Meta:
         model = BookReview
         fields = ['brid', 'book', 'reviewer', 'rating', 'content', 'created_at', 'updated_at', 'love_react_count']
         read_only_fields = ('__all__',)   
 
+    def get_reviewer(self, obj):
+        return {'rid': obj.reviewer.rid}
+    def get_book(self, obj):
+        return {'id': obj.book.id}
     def get_love_react_count(self, obj):
         return obj.loved_by.count()
 
-class BookReviewWriteSerializer(serializers.ModelSerializer):
-    book = serializers.PrimaryKeyRelatedField(queryset=Book.objects.all(), required = True,allow_null = False)
-    reviewer = serializers.PrimaryKeyRelatedField(queryset=Reader.objects.all(), required = True, allow_null = False)
+class BookReviewCreateSerializer(serializers.ModelSerializer):
+    book = serializers.PrimaryKeyRelatedField(queryset=Book.objects.all(), required = True)
+    reviewer = serializers.PrimaryKeyRelatedField(queryset=Reader.objects.all(), required = True)
     class Meta:
         model = BookReview 
         fields = ['brid', 'book', 'reviewer', 'rating', 'content']
+        read_only_fileds = ('brid',)
         extra_kwargs = {
             'content': {'required': True},
             'rating': {'required': True},
@@ -35,14 +40,12 @@ class BookReviewWriteSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         return BookReview.objects.create(**validated_data)
     
-
 class BookReviewUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = BookReview 
         fields = ['rating', 'content']
     
     def validate(self, attrs):
-        print(attrs.get('rating'))
         if attrs.get('rating'):
             if attrs['rating'] < 0 or attrs['rating'] > 5:
                 raise serializers.ValidationError("Rating must be between 0 and 5")
@@ -53,11 +56,9 @@ class BookReviewUpdateSerializer(serializers.ModelSerializer):
         instance.content = validated_data.get('content', instance.content)
         instance.save()
         return instance
-
    
-
-class BookReviewLoveSerializer(serializers.ModelSerializer):
-    loved_by = serializers.PrimaryKeyRelatedField(queryset=Reader.objects.all(), many = True, required = True, allow_null = False)
+class BookReviewLoveUpdateSerializer(serializers.ModelSerializer):
+    loved_by = serializers.PrimaryKeyRelatedField(queryset=Reader.objects.all(), many = True, required = True)
     class Meta:
         model = BookReview 
         fields = ['loved_by']

@@ -3,23 +3,24 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 
 from .models import LibraryStock
-from .serializers import LibraryStockReadSerializer, LibraryStockWriteSerializer, LibraryStockUpdateSerializer
+from .serializers import LibraryStockReadSerializer, LibraryStockCreateSerializer, LibraryStockUpdateSerializer
+from library.permissions import IsLibraryUserPermission
 from .permissions import IsLibraryStockOwnerPermission
 
 class LibraryStockListAPIView(ListAPIView):
-    queryset = LibraryStock.objects.all()
     serializer_class = LibraryStockReadSerializer
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
-#todo: only library user can access this view
-class MyLibraryStockListAPIView(ListAPIView):
-    serializer_class = LibraryStockReadSerializer
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated, IsLibraryStockOwnerPermission]
-    
     def get_queryset(self):
-        return LibraryStock.objects.all().filter(library=self.request.user.library)
+        lid = self.request.query_params.get('lid', None)
+        if lid:
+            return LibraryStock.objects.raw(
+                'SELECT * FROM library_stock WHERE library_id = %s',
+                [lid]
+            )
+        else:
+            return LibraryStock.objects.raw('SELECT * FROM library_stock')
 
 class LibraryStockDetailAPIView(RetrieveAPIView):
     queryset = LibraryStock.objects.all()
@@ -28,12 +29,11 @@ class LibraryStockDetailAPIView(RetrieveAPIView):
     permission_classes = [IsAuthenticated]
     lookup_field = 'lsid'
 
-#todo: permit only library account to create library stock
 class LibraryStockCreateAPIView(CreateAPIView):
     queryset = LibraryStock.objects.all()
-    serializer_class = LibraryStockWriteSerializer
+    serializer_class = LibraryStockCreateSerializer
     authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsLibraryUserPermission]
 
 class LibraryStockUpdateAPIView(UpdateAPIView):
     queryset = LibraryStock.objects.all()

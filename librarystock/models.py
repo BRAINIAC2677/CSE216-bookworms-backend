@@ -15,8 +15,9 @@ class LibraryStock(models.Model):
         
     def __str__(self):
         return str({
-            'library': self.library.library_name,
-            'book': self.book.title,
+            'lsid': self.lsid,
+            'library': self.library,
+            'book': self.book,
             'quantity': self.quantity,
             'borrow_fee_per_day': self.borrow_fee_per_day,
         })

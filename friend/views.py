@@ -6,47 +6,51 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 
 from .models import Friend
-from .serializers import FriendReadSerializer, FriendWriteSerializer
+from .serializers import FriendReadSerializer, FriendCreateSerializer, FriendUpdateSerializer
+from .permissions import IsFriendshipOwnerPermission
+from reader.permissions import IsReaderUserPermission
 
-# have to add custom permissions to the views
 class FriendListAPIView(ListAPIView):
     serializer_class = FriendReadSerializer
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Friend.objects.filter(Q(friendship_from__exact=self.request.user) | Q(friendship_to__exact=self.request.user), Q(is_pending__exact=False))
+        rid = self.request.query_params.get('rid', None)
+        if rid:
+            return Friend.objects.raw(
+                'SELECT * FROM friend WHERE NOT is_pending AND (friendship_from_id = %s OR friendship_to_id = %s)',
+                [rid, rid]
+            )
+        elif self.request.user.is_staff:
+            return Friend.objects.raw('SELECT * FROM friend')
+        else:
+            return Friend.objects.none()
 
 class PendingFriendListAPIView(ListAPIView):
     serializer_class = FriendReadSerializer
     authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsFriendshipOwnerPermission]
 
     def get_queryset(self):
-        return Friend.objects.filter(Q(friendship_from__exact=self.request.user) | Q(friendship_to__exact=self.request.user), Q(is_pending__exact=True))
+        return Friend.objects.raw('SELECT * FROM friend WHERE is_pending')
 
 class FriendCreateAPIView(CreateAPIView):
-    serializer_class = FriendWriteSerializer
+    serializer_class = FriendCreateSerializer
     authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
-
-    # def perform_create(self, serializer):
-    #     serializer.save(friendship_from=self.request.user)
+    permission_classes = [IsAuthenticated, IsReaderUserPermission]
 
 class FriendUpdateAPIView(UpdateAPIView):
-    serializer_class = FriendWriteSerializer
+    queryset = Friend.objects.all()
+    serializer_class = FriendUpdateSerializer
     authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsFriendshipOwnerPermission]
     lookup_field = 'fid'
-
-    def get_queryset(self):
-        return Friend.objects.filter(Q(friendship_from__exact=self.request.user) | Q(friendship_to__exact=self.request.user), Q(is_pending__exact=False))
 
 class FriendDeleteAPIView(DestroyAPIView):
+    queryset = Friend.objects.all()
     authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsFriendshipOwnerPermission]
     lookup_field = 'fid'
 
-    def get_queryset(self):
-        return Friend.objects.filter(Q(friendship_from__exact=self.request.user) | Q(friendship_to__exact=self.request.user))
     

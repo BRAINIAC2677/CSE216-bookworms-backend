@@ -8,5 +8,7 @@ class Genre(models.Model):
         db_table = 'genre'
         
     def __str__(self):
-        return self.name
-    
+        return str({
+            'gid': self.gid,
+            'name': self.name,
+        })

@@ -1,12 +1,9 @@
-from django.shortcuts import render
-
-# Create your views here.
 from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveAPIView, UpdateAPIView, DestroyAPIView
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 
 from .models import Book
-from .serializers import BookReadSerializer, BookWriteSerializer
+from .serializers import BookReadSerializer, BookCreateUpdateSerializer
 
 class BookListAPIView(ListAPIView):
     serializer_class = BookReadSerializer
@@ -111,24 +108,26 @@ class BookListAPIView(ListAPIView):
                 [author_ids]
             )
         else:
-            return Book.objects.all()
-
-    
+            return Book.objects.raw(
+                'SELECT * FROM book'
+            )
 
 class BookCreateAPIView(CreateAPIView):
     queryset = Book.objects.all()
-    serializer_class = BookWriteSerializer
+    serializer_class = BookCreateUpdateSerializer
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated, IsAdminUser]
 
 class BookRetrieveAPIView(RetrieveAPIView):
     queryset = Book.objects.all()
     serializer_class = BookReadSerializer
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
     lookup_field = 'id'
 
 class BookUpdateAPIView(UpdateAPIView):
     queryset = Book.objects.all()
-    serializer_class = BookWriteSerializer
+    serializer_class = BookCreateUpdateSerializer
     lookup_field = 'id'
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated, IsAdminUser]

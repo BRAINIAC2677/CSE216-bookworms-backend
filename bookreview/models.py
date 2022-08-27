@@ -18,10 +18,13 @@ class BookReview(models.Model):
 
     def __str__(self):
         return str({
-            'book': self.book.title,
-            'reviewer': self.reviewer.user.username,
+            'brid': self.brid,
+            'book': self.book,
+            'reviewer': self.reviewer,
             'rating': self.rating,
+            'content': self.content,    
             'created_at': self.created_at,
             'updated_at': self.updated_at,
+            'loved_by': self.loved_by
         })
 

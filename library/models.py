@@ -1,5 +1,4 @@
 from django.db import models
-
 from django.contrib.auth.models import User
 
 class Library(models.Model):
@@ -17,6 +16,7 @@ class Library(models.Model):
         return str({
             'lid': self.lid,
             'username': self.user.username,
+            'email': self.user.email,
             'library_name': self.library_name,
             'photo_url': self.photo_url,
             'longitude': self.longitude,

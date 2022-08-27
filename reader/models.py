@@ -12,7 +12,15 @@ class Reader(models.Model):
         db_table = 'reader'
         
     def __str__(self):
-        return self.user.username
+        return str({
+            'rid': self.rid,
+            'username': self.user.username,
+            'first_name': self.user.first_name,
+            'last_name': self.user.last_name,
+            'email': self.user.email,
+            'photo_url': self.photo_url,
+            'bio': self.bio,
+        })
 
 
 

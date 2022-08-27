@@ -148,7 +148,7 @@ class TestBookAPIViewEndpoints:
 
     def test_create(self, api_client, admin_reader_apiauth_token):
         baked_book = baker.prepare('book.Book', page_count = 2677)
-        data = {
+        create_data = {
             'id': baked_book.id,
             'title': baked_book.title,
             'description': baked_book.description,
@@ -157,21 +157,22 @@ class TestBookAPIViewEndpoints:
             'genres': baked_book.genres.all(),
             'authors': baked_book.authors.all(),
         }
-        print(data)
-        create_response = api_client.post(self.endpoint + 'create/', data = data, format='json', HTTP_AUTHORIZATION='Token ' + admin_reader_apiauth_token)
+        print(create_data)
+        create_response = api_client.post(self.endpoint + 'create/', data = create_data, format='json', HTTP_AUTHORIZATION='Token ' + admin_reader_apiauth_token)
+        print(create_response.data)
         assert create_response.status_code == 201
 
     def test_full_update(self, api_client, admin_reader_apiauth_token):
-        baker.make('book.Book')
-        baked_book = baker.prepare('book.Book', page_count = 2677)
+        baked_book1 = baker.make('book.Book')
+        baked_book2 = baker.prepare('book.Book', page_count = 2677)
         data = {
-            'id': baked_book.id,
-            'title': baked_book.title,
-            'description': baked_book.description,
-            'photo_url': baked_book.photo_url,
-            'page_count': baked_book.page_count,
-            'genres': baked_book.genres.all(),
-            'authors': baked_book.authors.all(),
+            'id': baked_book2.id,
+            'title': baked_book2.title,
+            'description': baked_book2.description,
+            'photo_url': baked_book2.photo_url,
+            'page_count': baked_book2.page_count,
+            'genres': baked_book2.genres.all(),
+            'authors': baked_book2.authors.all(),
         }
         lis_response = api_client.get(self.endpoint + 'list/', HTTP_AUTHORIZATION='Token ' + admin_reader_apiauth_token)
         endpoint = self.endpoint + 'update/' + lis_response.data[0]['id'] + '/'
@@ -200,7 +201,7 @@ class TestBookAPIViewEndpoints:
         baker.make('book.Book')
         lis_response = api_client.get(self.endpoint + 'list/', HTTP_AUTHORIZATION='Token ' + registered_reader['token'])
         endpoint = self.endpoint + 'detail/' + lis_response.data[0]['id'] + '/'
-        detail_response = api_client.get(endpoint)
+        detail_response = api_client.get(endpoint, HTTP_AUTHORIZATION='Token ' + registered_reader['token'])
         assert detail_response.status_code == 200
 
     def test_delete(self, api_client, admin_reader_apiauth_token):

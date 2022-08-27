@@ -22,15 +22,14 @@ class BookReadSerializer(serializers.ModelSerializer):
     
 
 
-class BookWriteSerializer(serializers.ModelSerializer):
+class BookCreateUpdateSerializer(serializers.ModelSerializer):
     id = serializers.CharField(max_length=13,required=True, validators=[UniqueValidator(queryset=Book.objects.all())])
-    genres = serializers.PrimaryKeyRelatedField(many = True, queryset = Genre.objects.all())
-    authors = serializers.PrimaryKeyRelatedField(many = True, queryset = Reader.objects.all())
+    genres = serializers.PrimaryKeyRelatedField(many = True, required=True, queryset = Genre.objects.all())
+    authors = serializers.PrimaryKeyRelatedField(many = True, required=True, queryset = Reader.objects.all())
 
     class Meta:
         model = Book 
         fields = ['id','title', 'description','photo_url','page_count', 'genres', 'authors']
-        write_only_fields = '__all__'
         extra_kwargs = {
             'title': {
                 'required': True,
@@ -42,6 +41,11 @@ class BookWriteSerializer(serializers.ModelSerializer):
                 'required': True,
             },
         }
+    
+    def validate_page_count(self, value):
+        if value < 0:
+            raise serializers.ValidationError("Page count must be greater than 0")
+        return value
     
     def create(self, validated_data):
         book_genres = validated_data.pop('genres')

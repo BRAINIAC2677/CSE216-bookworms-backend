@@ -3,14 +3,13 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 
 from .models import Reader
-from .serializers import ReaderWriteSerializer, ReaderReadSerializer
-from .permissions import IsReaderAccountOwnerPermission
+from .serializers import ReaderReadSerializer, ReaderCreateSerializer, ReaderUpdateSerializer
+from .permissions import IsReaderAccountOwnerPermission, IsReaderUserPermission
 
 
 class ReaderRegisterAPIView(CreateAPIView):
-    serializer_class = ReaderWriteSerializer
+    serializer_class = ReaderCreateSerializer
     permission_classes = [AllowAny]
-
 
 class ReaderListAPIView(ListAPIView):
     queryset = Reader.objects.all()
@@ -18,10 +17,9 @@ class ReaderListAPIView(ListAPIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
-
 class MyReaderDetailAPIView(RetrieveAPIView):
     authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsReaderAccountOwnerPermission]
     queryset = Reader.objects.all()
     serializer_class = ReaderReadSerializer
 
@@ -37,17 +35,16 @@ class ReaderDetailAPIView(RetrieveAPIView):
 
 class ReaderUpdateAPIView(UpdateAPIView):
     authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsReaderUserPermission]
     queryset = Reader.objects.all()
-    serializer_class = ReaderWriteSerializer
+    serializer_class = ReaderUpdateSerializer
 
     def get_object(self):
         return self.request.user.reader
 
-
 class ReaderDeleteAPIView(DestroyAPIView):
     authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsReaderUserPermission]
     queryset = Reader.objects.all()
 
     def get_object(self):

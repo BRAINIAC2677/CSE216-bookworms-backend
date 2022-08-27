@@ -1,9 +1,7 @@
-from django.shortcuts import render
-
 from rest_framework.generics import ListAPIView, CreateAPIView
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
-# Create your views here.
+
 from .models import Genre
 from .serializers import GenreSerializer
 

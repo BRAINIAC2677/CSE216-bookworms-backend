@@ -9,10 +9,10 @@ class LibraryStockReadSerializer(serializers.ModelSerializer):
     library = serializers.StringRelatedField()
     class Meta:
         model = LibraryStock
-        fields = ['book', 'library', 'quantity', 'borrow_fee_per_day']
+        fields = ['lsid', 'book', 'library', 'quantity', 'borrow_fee_per_day']
         read_only_fields = ('__all__',)
 
-class LibraryStockWriteSerializer(serializers.ModelSerializer):
+class LibraryStockCreateSerializer(serializers.ModelSerializer):
     book = serializers.PrimaryKeyRelatedField(queryset=Book.objects.all())
     library = serializers.PrimaryKeyRelatedField(queryset=Library.objects.all())
 
@@ -43,13 +43,12 @@ class LibraryStockWriteSerializer(serializers.ModelSerializer):
         def create(self, validated_data):
             return LibraryStock.objects.create(**validated_data)
 
-
 class LibraryStockUpdateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = LibraryStock
-        fields = ['lsid','quantity', 'borrow_fee_per_day']
-        read_only_fields = ('lsid',)
+        fields = ['lsid','book', 'library', 'quantity', 'borrow_fee_per_day']
+        read_only_fields = ('lsid','book', 'library',)
 
         def validate_quantity(self, value):
             if value < 0:

@@ -7,15 +7,15 @@ class TestBookReviewAPIViewEndpoints:
 
     endpoint = '/api/bookreview/'
 
-    def test_list(self, api_client):
+    def test_list(self, api_client, registered_reader):
         baker.make('bookreview.BookReview', _quantity=3)
-        lis_response = api_client.get(self.endpoint + 'list/')
+        lis_response = api_client.get(self.endpoint + 'list/', HTTP_AUTHORIZATION='Token ' + registered_reader['token'])
         assert lis_response.status_code == 200
         assert len(lis_response.data) == 3
 
-    def test_detail(self, api_client):
+    def test_detail(self, api_client, registered_reader):
         bookreview = baker.make('bookreview.BookReview')
-        detail_response = api_client.get(self.endpoint + f'detail/{bookreview.brid}/')
+        detail_response = api_client.get(self.endpoint + f'detail/{bookreview.brid}/', HTTP_AUTHORIZATION='Token ' + registered_reader['token'])
         assert detail_response.status_code == 200
     
     def test_create(self, api_client, registered_reader):

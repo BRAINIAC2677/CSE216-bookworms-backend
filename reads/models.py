@@ -21,8 +21,9 @@ class Reads(models.Model):
         
     def __str__(self):
         return str({
-            'reader': self.reader.user.username,
-            'book': self.book.title,
+            'rsid': self.rsid,
+            'reader': self.reader,
+            'book': self.book,
             'created_at': self.created_at,
             'updated_at': self.updated_at,
             'status': self.status,

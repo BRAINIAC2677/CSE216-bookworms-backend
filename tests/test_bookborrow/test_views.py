@@ -20,21 +20,21 @@ class TestBookBorrowAPIViewEndpoints:
         print(baked_bookborrow)
         if test_param_id == 1:
             query_data = {
-                'borrowed_by_id': registered_reader['rid'],
+                'rid': registered_reader['rid'],
             }
         elif test_param_id == 2:
             query_data = {
-                'borrowed_from_id': baked_bookborrow.borrowed_from.lid,
+                'lid': baked_bookborrow.borrowed_from.lid,
             }
         elif test_param_id == 3:
             query_data = {
-                'borrowed_by_id': baked_bookborrow.borrowed_by.rid,
-                'borrowed_from_id': baked_bookborrow.borrowed_from.lid,
+                'rid': baked_bookborrow.borrowed_by.rid,
+                'lid': baked_bookborrow.borrowed_from.lid,
             }
         elif test_param_id == 4:
             query_data = {}
             
-        list_response = api_client.get(self.endpoint + 'querylist/', format='json', HTTP_AUTHORIZATION='Token ' + registered_reader['token'], data=query_data)
+        list_response = api_client.get(self.endpoint + 'list/', format='json', HTTP_AUTHORIZATION='Token ' + registered_reader['token'], data=query_data)
         print(list_response.data)
         assert list_response.status_code == 200
         
