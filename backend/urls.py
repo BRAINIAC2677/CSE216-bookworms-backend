@@ -53,6 +53,7 @@ urlpatterns = [
     path('api/librarystock/', include('librarystock.urls')),
     path('api/bookborrow/', include('bookborrow.urls')),
     path('api/friend/', include('friend.urls')),
+    path('api/comment/', include('comment.urls')),
 
     re_path(r'^media/(?P<path>.*)$', serve,{'document_root':settings.MEDIA_ROOT}), 
     re_path(r'^static/(?P<path>.*)$', serve,{'document_root':settings.STATIC_ROOT}), 

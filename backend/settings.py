@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'librarystock',
     'bookborrow',
     'friend',
+    'comment',
 ]
 
 MIDDLEWARE = [
