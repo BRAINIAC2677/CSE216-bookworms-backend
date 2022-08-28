@@ -58,6 +58,8 @@ INSTALLED_APPS = [
     'bookborrow',
     'friend',
     'comment',
+    'event',
+    'notification',
 ]
 
 MIDDLEWARE = [
