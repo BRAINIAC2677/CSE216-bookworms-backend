@@ -13,7 +13,7 @@ class ReaderRegisterAPIView(CreateAPIView):
 
 class AdminReaderRegisterAPIView(CreateAPIView):
     serializer_class = AdminReaderCreateSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAdminUser]
 
 class ReaderListAPIView(ListAPIView):
     queryset = Reader.objects.all()
