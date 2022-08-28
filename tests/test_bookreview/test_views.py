@@ -21,7 +21,7 @@ class TestBookReviewAPIViewEndpoints:
     def test_create(self, api_client, registered_reader):
         baked_book = baker.make('book.Book')
         data = {
-            'book': baked_book.id,
+            'book': baked_book.bid,
             'reviewer': registered_reader['rid'],
             'rating': 5,
             'content': 'This is a test review.',
@@ -34,7 +34,7 @@ class TestBookReviewAPIViewEndpoints:
     def test_full_update(self, api_client, registered_reader):
         baked_book = baker.make('book.Book')
         data = {
-            'book': baked_book.id,
+            'book': baked_book.bid,
             'reviewer': registered_reader['rid'],
             'rating': 5,
             'content': 'This is a test review.',
@@ -52,7 +52,7 @@ class TestBookReviewAPIViewEndpoints:
     def test_partial_update(self, api_client, registered_reader, field):
         baked_book = baker.make('book.Book')
         data = {
-            'book': baked_book.id,
+            'book': baked_book.bid,
             'reviewer': registered_reader['rid'],
             'rating': 5,
             'content': 'This is a test review.',
@@ -73,7 +73,7 @@ class TestBookReviewAPIViewEndpoints:
     def test_update_lovedby(self, api_client, registered_reader):
         baked_book = baker.make('book.Book')
         data = {
-            'book': baked_book.id,
+            'book': baked_book.bid,
             'reviewer': registered_reader['rid'],
             'rating': 5,
             'content': 'This is a test review.',

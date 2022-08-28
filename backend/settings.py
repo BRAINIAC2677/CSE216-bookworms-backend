@@ -51,7 +51,7 @@ INSTALLED_APPS = [
     'reader',
     'book',
     'genre',
-    'reads',
+    'read',
     'bookreview',
     'library',
     'librarystock',

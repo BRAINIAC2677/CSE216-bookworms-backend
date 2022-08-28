@@ -5,11 +5,11 @@ pytestmark = pytest.mark.django_db
 
 class TestReadsAPIViewEndpoints:
 
-    endpoint = '/api/reads/'
+    endpoint = '/api/read/'
 
     @pytest.mark.parametrize('test_param_id', [1,2])
     def test_list(self, api_client, test_param_id, registered_reader):
-        baked_read = baker.make('reads.Reads')
+        baked_read = baker.make('read.Read')
         print(baked_read)
         if test_param_id == 1:
             query_data = {
@@ -23,7 +23,7 @@ class TestReadsAPIViewEndpoints:
         assert list_response.status_code == 200
 
     def test_detail(self, api_client, registered_reader):
-        baked_read = baker.make('reads.Reads')
+        baked_read = baker.make('read.Read')
         print(baked_read)
         detail_response = api_client.get(self.endpoint + 'detail/' + str(baked_read.rsid) + '/', format='json', HTTP_AUTHORIZATION= 'Token ' + registered_reader['token'])
         print(detail_response.data)
@@ -33,7 +33,7 @@ class TestReadsAPIViewEndpoints:
         baked_book = baker.make('book.Book')
         create_data = {
             'reader': registered_reader['rid'],
-            'book': baked_book.id,
+            'book': baked_book.bid,
             'status': 'w',
         } 
         create_response = api_client.post(self.endpoint + 'create/', create_data, format='json', HTTP_AUTHORIZATION= 'Token ' + registered_reader['token'])
@@ -44,7 +44,7 @@ class TestReadsAPIViewEndpoints:
         baked_book = baker.make('book.Book')
         create_data = {
             'reader': registered_reader['rid'],
-            'book': baked_book.id,
+            'book': baked_book.bid,
             'status': 'w',
         } 
         create_response = api_client.post(self.endpoint + 'create/', create_data, format='json', HTTP_AUTHORIZATION= 'Token ' + registered_reader['token'])
@@ -60,7 +60,7 @@ class TestReadsAPIViewEndpoints:
         baked_book = baker.make('book.Book')
         create_data = {
             'reader': registered_reader['rid'],
-            'book': baked_book.id,
+            'book': baked_book.bid,
             'status': 'w',
         } 
         create_response = api_client.post(self.endpoint + 'create/', create_data, format='json', HTTP_AUTHORIZATION= 'Token ' + registered_reader['token'])

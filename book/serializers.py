@@ -8,10 +8,10 @@ from reader.models import Reader
 class BookReadSerializer(serializers.ModelSerializer):
     genres = serializers.SerializerMethodField()
     authors = serializers.SerializerMethodField()
-
+    
     class Meta:
         model = Book
-        fields = ['id', 'title', 'description', 'photo_url', 'page_count', 'created_at', 'updated_at', 'genres', 'authors']
+        fields = ['bid', 'title', 'description', 'photo_url', 'page_count', 'created_at', 'updated_at','genres', 'authors']
         read_only_fields = ('__all__',)
     
     def get_genres(self, obj):
@@ -23,13 +23,13 @@ class BookReadSerializer(serializers.ModelSerializer):
 
 
 class BookCreateUpdateSerializer(serializers.ModelSerializer):
-    id = serializers.CharField(max_length=13,required=True, validators=[UniqueValidator(queryset=Book.objects.all())])
+    bid = serializers.CharField(max_length=13,required=True, validators=[UniqueValidator(queryset=Book.objects.all())])
     genres = serializers.PrimaryKeyRelatedField(many = True, required=True, queryset = Genre.objects.all())
     authors = serializers.PrimaryKeyRelatedField(many = True, required=True, queryset = Reader.objects.all())
 
     class Meta:
         model = Book 
-        fields = ['id','title', 'description','photo_url','page_count', 'genres', 'authors']
+        fields = ['bid','title', 'description','photo_url','page_count', 'genres', 'authors']
         extra_kwargs = {
             'title': {
                 'required': True,
@@ -63,7 +63,7 @@ class BookCreateUpdateSerializer(serializers.ModelSerializer):
         if validated_data.get('authors'):
             book_authors = validated_data.pop('authors')
             instance.authors.set(book_authors)
-        instance.id = validated_data.get('id', instance.id)
+        instance.bid = validated_data.get('bid', instance.bid)
         instance.title = validated_data.get('title', instance.title)
         instance.description = validated_data.get('description', instance.description)
         instance.photo_url = validated_data.get('photo_url', instance.photo_url)

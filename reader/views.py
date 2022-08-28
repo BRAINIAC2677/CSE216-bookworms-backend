@@ -3,12 +3,16 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 
 from .models import Reader
-from .serializers import ReaderReadSerializer, ReaderCreateSerializer, ReaderUpdateSerializer
+from .serializers import ReaderReadSerializer, ReaderCreateSerializer, ReaderUpdateSerializer, AdminReaderCreateSerializer
 from .permissions import IsReaderAccountOwnerPermission, IsReaderUserPermission
 
 
 class ReaderRegisterAPIView(CreateAPIView):
     serializer_class = ReaderCreateSerializer
+    permission_classes = [AllowAny]
+
+class AdminReaderRegisterAPIView(CreateAPIView):
+    serializer_class = AdminReaderCreateSerializer
     permission_classes = [AllowAny]
 
 class ReaderListAPIView(ListAPIView):

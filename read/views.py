@@ -2,7 +2,7 @@ from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView,
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 
-from .models import Reads
+from .models import Read
 from .serializers import ReadsReadSerializer, ReadsCreateSerializer, ReadsUpdateSerializer
 from reader.permissions import IsReaderUserPermission
 from .permissions import IsReadsOwnerPermission
@@ -16,34 +16,34 @@ class ReadsListAPIView(ListAPIView):
     def get_queryset(self):
         rid = self.request.query_params.get('rid')
         if rid:
-            return Reads.objects.raw(
-                'SELECT * FROM reads R WHERE R.reader_id = %s',
+            return Read.objects.raw(
+                'SELECT * FROM read R WHERE R.reader_id = %s',
                 [rid]
             )
-        return Reads.objects.all()
+        return Read.objects.all()
 
 class ReadsDetailAPIView(RetrieveAPIView):
-    queryset = Reads.objects.all()
+    queryset = Read.objects.all()
     serializer_class = ReadsReadSerializer
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
     lookup_field = 'rsid'
 
 class ReadsCreateAPIView(CreateAPIView):
-    queryset = Reads.objects.all()
+    queryset = Read.objects.all()
     serializer_class = ReadsCreateSerializer
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated, IsReaderUserPermission]
 
 class ReadsUpdateAPIView(UpdateAPIView):
-    queryset = Reads.objects.all()
+    queryset = Read.objects.all()
     serializer_class = ReadsUpdateSerializer
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated, IsReaderUserPermission, IsReadsOwnerPermission]
     lookup_field = 'rsid'
 
 class ReadsDeleteAPIView(DestroyAPIView):
-    queryset = Reads.objects.all()
+    queryset = Read.objects.all()
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated, IsReaderUserPermission, IsReadsOwnerPermission]
     lookup_field = 'rsid'

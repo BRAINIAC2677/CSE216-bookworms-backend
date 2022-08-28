@@ -11,10 +11,20 @@ class LibraryRegisterAPIView(CreateAPIView):
     permission_classes = [AllowAny]
 
 class LibraryListAPIView(ListAPIView):
-    queryset = Library.objects.all()
     serializer_class = LibraryReadSerializer
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        bid = self.request.query_params.get('bid', None)
+
+        if bid:
+            return Library.objects.raw(
+                'SELECT * FROM library WHERE lid IN (SELECT library_id FROM library_stock WHERE book_id = %s)',
+                [bid]
+            )
+        else:
+            return Library.objects.raw('SELECT * FROM library')
 
 class LibraryDetailAPIView(RetrieveAPIView):
     queryset = Library.objects.all()

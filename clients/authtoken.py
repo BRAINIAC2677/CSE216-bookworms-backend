@@ -20,18 +20,11 @@ import json
 endpoint = 'http://127.0.0.1:8000/api/api-token-auth/'
 
 data = {
-    'username': 'b',
-    'password': 'b'
+    'username': 'a',
+    'password': 'a'
 }
 
 response = requests.post(endpoint, data = data)
 print(response.status_code)
+print(response.json())
 
-token = response.json()['token']
-endpoint = 'http://127.0.0.1:8000/api/reader/update/'
-data = {
-    'user':{}, 
-    'bio': 'updated'
-}
-response = requests.put(endpoint, json = data, headers = {'Authorization': 'Token ' + token})
-print(response.status_code)

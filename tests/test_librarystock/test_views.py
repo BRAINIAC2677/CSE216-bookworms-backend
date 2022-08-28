@@ -26,7 +26,7 @@ class TestLibraryStockAPIViewEndpoints:
         baked_book = baker.make('book.Book')
         print(baked_book)
         create_data = {
-            'book': baked_book.id,
+            'book': baked_book.bid,
             'library': registered_library['lid'],
             'quantity': -1,  
             'borrow_fee_per_day': 10
@@ -42,7 +42,7 @@ class TestLibraryStockAPIViewEndpoints:
         baked_book = baker.make('book.Book')
         baked_library = baker.make('library.Library')
         create_data = {
-            'book': baked_book.id,
+            'book': baked_book.bid,
             'library': baked_library.lid,
             'quantity': -1,  
             'borrow_fee_per_day': 10
@@ -55,7 +55,7 @@ class TestLibraryStockAPIViewEndpoints:
         baked_book = baker.make('book.Book')
         print(baked_book)
         create_data = {
-            'book': baked_book.id,
+            'book': baked_book.bid,
             'library': registered_library['lid'],
             'quantity': -1,  
             'borrow_fee_per_day': 10
@@ -75,7 +75,7 @@ class TestLibraryStockAPIViewEndpoints:
         baked_book = baker.make('book.Book')
         print(baked_book)
         create_data = {
-            'book': baked_book.id,
+            'book': baked_book.bid,
             'library': registered_library['lid'],
             'quantity': -1,  
             'borrow_fee_per_day': 10
@@ -98,7 +98,7 @@ class TestLibraryStockAPIViewEndpoints:
         baked_book = baker.make('book.Book')
         print(baked_book)
         create_data = {
-            'book': baked_book.id,
+            'book': baked_book.bid,
             'library': registered_library['lid'],
             'quantity': -1,  
             'borrow_fee_per_day': 10

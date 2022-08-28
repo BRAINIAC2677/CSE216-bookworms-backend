@@ -37,7 +37,7 @@ class ReaderReadSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Reader
-        fields = ['rid','user','bio', 'photo_url']
+        fields = ['rid','user','bio', 'photo_url', 'points']
         read_only_fields = ('__all__',)
 
     def get_user(self, obj):
@@ -48,7 +48,8 @@ class ReaderCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Reader
-        fields = ['rid','user', 'photo_url', 'bio']
+        fields = ['rid','user', 'photo_url', 'bio', 'points']
+        read_only_fields = ('rid','points',)
 
     def create(self, validated_data):
         user_data = validated_data.pop('user')
@@ -66,7 +67,8 @@ class ReaderUpdateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Reader
-        fields = ['rid','user', 'photo_url', 'bio']
+        fields = ['rid','user', 'photo_url', 'bio', 'points']
+        read_only_fields = ('rid',)
 
     def update(self, instance, validated_data):
         if validated_data.get('user'):
@@ -83,3 +85,22 @@ class ReaderUpdateSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
+class AdminReaderCreateSerializer(serializers.ModelSerializer):
+    user = ReaderUserSerializer(required=True)
+
+    class Meta:
+        model = Reader
+        fields = ['rid','user', 'photo_url', 'bio', 'points']
+        read_only_fields = ('rid',)
+
+    def create(self, validated_data):
+        user_data = validated_data.pop('user')
+        user = User.objects.create(**user_data)
+        user.set_password(user_data.get('password'))
+        user.is_staff = True
+        reader = Reader.objects.create(user=user, **validated_data)
+        if not Group.objects.filter(name='reader').exists():
+            Group.objects.create(name='reader')
+        user.groups.add(Group.objects.get(name='reader'))
+        user.save()
+        return reader

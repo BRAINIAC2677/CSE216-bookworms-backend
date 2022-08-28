@@ -47,7 +47,7 @@ urlpatterns = [
     path('api/reader/', include('reader.urls')),
     path('api/genre/', include('genre.urls')),
     path('api/book/', include('book.urls')),
-    path('api/reads/', include('reads.urls')),
+    path('api/read/', include('read.urls')),
     path('api/bookreview/', include('bookreview.urls')),
     path('api/library/', include('library.urls')),
     path('api/librarystock/', include('librarystock.urls')),

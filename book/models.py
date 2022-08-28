@@ -4,7 +4,7 @@ from genre.models import Genre
 from reader.models import Reader
 
 class Book(models.Model):
-    id = models.CharField(max_length=13,primary_key=True)
+    bid = models.CharField(max_length=13,primary_key=True)
     title = models.CharField(max_length=255)
     description = models.TextField()
     photo_url = models.CharField(max_length=255)
@@ -19,7 +19,7 @@ class Book(models.Model):
         
     def __str__(self):
         return str({
-            'id': self.id,
+            'bid': self.bid,
             'title': self.title,
             'description': self.description,
             'photo_url': self.photo_url,

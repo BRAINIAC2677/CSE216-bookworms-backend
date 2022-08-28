@@ -10,69 +10,74 @@ class TestBookAPIViewEndpoints:
 
     @pytest.mark.parametrize('test_param_id',[x for x in range(1,22)])
     def test_list(self, api_client, test_param_id, registered_reader):
-        baked_books = baker.make('book.Book', _quantity=1)
-        print(baked_books)
+        baked_genre = baker.make('genre.Genre')
+        baked_reader = baker.make('reader.Reader')
+        baked_book = baker.make('book.Book', page_count = 2677, genres = [baked_genre], authors = [baked_reader])
 
-        id = baked_books[0].id
-        title = baked_books[0].title
-        gte_page_count = baked_books[0].page_count
-        lte_page_count = baked_books[0].page_count
-        genre_ids = baked_books[0].genres.all()
-        author_ids = baked_books[0].authors.all()
+        print(f'baked_genre:\n{baked_genre}')
+        print(f'baked_reader:\n{baked_reader}')
+        print(f'baked_book:\n{baked_book}')
+
+        bid = baked_book.bid
+        title = baked_book.title
+        gte_page_count = baked_book.page_count
+        lte_page_count = baked_book.page_count
+        genre_id = baked_book.genres.all()[0].gid
+        author_id = baked_book.authors.all()[0].rid
 
         if test_param_id == 1:
             query_data = {
-                'id': id, 
+                'bid': bid, 
                 'title': title, 
                 'gte_page_count': gte_page_count, 
                 'lte_page_count': lte_page_count, 
-                'genre_ids': genre_ids, 
-                'author_ids': author_ids, 
+                'genre_id': genre_id, 
+                'author_id': author_id, 
             }
         elif test_param_id == 2:
             query_data = {
-                'id': id,
+                'bid': bid,
                 'title': title,
                 'gte_page_count': gte_page_count,
                 'lte_page_count': lte_page_count,
-                'genre_ids': genre_ids,
+                'genre_id': genre_id,
             }
         elif test_param_id == 3:
             query_data = {
-                'id': id,
+                'bid': bid,
                 'title': title,
                 'gte_page_count': gte_page_count,
                 'lte_page_count': lte_page_count,
             }
         elif test_param_id == 4:
             query_data = {
-                'id': id,
+                'bid': bid,
                 'title': title,
                 'gte_page_count': gte_page_count,
             }
         elif test_param_id == 5:
             query_data = {
-                'id': id,
+                'bid': bid,
                 'title': title,
             }
         elif test_param_id == 6:
             query_data = {
-                'id': id,
+                'bid': bid,
             }
         elif test_param_id == 7:
             query_data = {
                 'title': title,
                 'gte_page_count': gte_page_count,
                 'lte_page_count': lte_page_count,
-                'genre_ids': genre_ids,
-                'author_ids': author_ids,
+                'genre_id': genre_id,
+                'author_id': author_id,
             }
         elif test_param_id == 8:
             query_data = {
                 'title': title,
                 'gte_page_count': gte_page_count,
                 'lte_page_count': lte_page_count,
-                'genre_ids': genre_ids,
+                'genre_id': genre_id,
             }
         elif test_param_id == 9:
             query_data = {
@@ -93,14 +98,14 @@ class TestBookAPIViewEndpoints:
             query_data = {
                 'gte_page_count': gte_page_count,
                 'lte_page_count': lte_page_count,
-                'genre_ids': genre_ids,
-                'author_ids': author_ids,
+                'genre_id': genre_id,
+                'author_id': author_id,
             }
         elif test_param_id == 13:
             query_data = {
                 'gte_page_count': gte_page_count,
                 'lte_page_count': lte_page_count,
-                'genre_ids': genre_ids,
+                'genre_id': genre_id,
             }
         elif test_param_id == 14:
             query_data = {
@@ -114,13 +119,13 @@ class TestBookAPIViewEndpoints:
         elif test_param_id == 16:
             query_data = {
                 'lte_page_count': lte_page_count,
-                'genre_ids': genre_ids,
-                'author_ids': author_ids,
+                'genre_id': genre_id,
+                'author_id': author_id,
             }
         elif test_param_id == 17:
             query_data = {
                 'lte_page_count': lte_page_count,
-                'genre_ids': genre_ids,
+                'genre_id': genre_id,
             }
         elif test_param_id == 18:
             query_data = {
@@ -128,16 +133,16 @@ class TestBookAPIViewEndpoints:
             }
         elif test_param_id == 19:
             query_data = {
-                'genre_ids': genre_ids,
-                'author_ids': author_ids,
+                'genre_id': genre_id,
+                'author_id': author_id,
             }
         elif test_param_id == 20:
             query_data = {
-                'genre_ids': genre_ids,
+                'genre_id': genre_id,
             }
         elif test_param_id == 21:
             query_data = {
-                'author_ids': author_ids,
+                'author_id': author_id,
             }
         else:
             query_data = {}
@@ -146,10 +151,11 @@ class TestBookAPIViewEndpoints:
         print(list_response.data)
         assert list_response.status_code == 200
 
+
     def test_create(self, api_client, admin_reader_apiauth_token):
         baked_book = baker.prepare('book.Book', page_count = 2677)
         create_data = {
-            'id': baked_book.id,
+            'bid': baked_book.bid,
             'title': baked_book.title,
             'description': baked_book.description,
             'photo_url': baked_book.photo_url,
@@ -166,7 +172,7 @@ class TestBookAPIViewEndpoints:
         baked_book1 = baker.make('book.Book')
         baked_book2 = baker.prepare('book.Book', page_count = 2677)
         data = {
-            'id': baked_book2.id,
+            'bid': baked_book2.bid,
             'title': baked_book2.title,
             'description': baked_book2.description,
             'photo_url': baked_book2.photo_url,
@@ -175,16 +181,16 @@ class TestBookAPIViewEndpoints:
             'authors': baked_book2.authors.all(),
         }
         lis_response = api_client.get(self.endpoint + 'list/', HTTP_AUTHORIZATION='Token ' + admin_reader_apiauth_token)
-        endpoint = self.endpoint + 'update/' + lis_response.data[0]['id'] + '/'
+        endpoint = self.endpoint + 'update/' + lis_response.data[0]['bid'] + '/'
         update_response = api_client.put(endpoint, data = data, format='json', HTTP_AUTHORIZATION='Token ' + admin_reader_apiauth_token)
         assert update_response.status_code == 200
 
-    @pytest.mark.parametrize('field', ['id', 'title', 'description', 'photo_url', 'page_count', 'genres', 'authors'])
+    @pytest.mark.parametrize('field', ['bid', 'title', 'description', 'photo_url', 'page_count', 'genres', 'authors'])
     def test_partial_update(self, api_client, admin_reader_apiauth_token, field):
         baker.make('book.Book')
         baked_book = baker.prepare('book.Book', page_count = 2677)
         lis_response = api_client.get(self.endpoint + 'list/', HTTP_AUTHORIZATION='Token ' + admin_reader_apiauth_token)
-        endpoint = self.endpoint + 'update/' + lis_response.data[0]['id'] + '/'
+        endpoint = self.endpoint + 'update/' + lis_response.data[0]['bid'] + '/'
         if field in ['genres', 'authors']:
             data = {
                 field: baked_book.__getattribute__(field).all()
@@ -200,14 +206,14 @@ class TestBookAPIViewEndpoints:
     def test_detail(self, api_client, registered_reader):
         baker.make('book.Book')
         lis_response = api_client.get(self.endpoint + 'list/', HTTP_AUTHORIZATION='Token ' + registered_reader['token'])
-        endpoint = self.endpoint + 'detail/' + lis_response.data[0]['id'] + '/'
+        endpoint = self.endpoint + 'detail/' + lis_response.data[0]['bid'] + '/'
         detail_response = api_client.get(endpoint, HTTP_AUTHORIZATION='Token ' + registered_reader['token'])
         assert detail_response.status_code == 200
 
     def test_delete(self, api_client, admin_reader_apiauth_token):
         baker.make('book.Book')
         lis_response = api_client.get(self.endpoint + 'list/', HTTP_AUTHORIZATION='Token ' + admin_reader_apiauth_token)
-        endpoint = self.endpoint + 'delete/' + lis_response.data[0]['id'] + '/'
+        endpoint = self.endpoint + 'delete/' + lis_response.data[0]['bid'] + '/'
         del_response = api_client.delete(endpoint, HTTP_AUTHORIZATION='Token ' + admin_reader_apiauth_token)
         assert del_response.status_code == 204
 

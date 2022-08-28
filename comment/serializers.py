@@ -7,10 +7,11 @@ from .models import Comment
 class CommentReadSerializer(serializers.ModelSerializer):
     commented_by = serializers.SerializerMethodField()
     commented_on = serializers.SerializerMethodField()
+    love_react_count = serializers.SerializerMethodField()
     loved_by = serializers.SerializerMethodField()
     class Meta:
         model = Comment
-        fields = ('cid', 'commented_by', 'commented_on', 'created_at', 'updated_at', 'loved_by')
+        fields = ('cid', 'commented_by', 'commented_on', 'created_at', 'updated_at', 'love_react_count', 'loved_by')
         read_only_fields = ('__all__',)
     
     def get_commented_by(self, obj):
@@ -19,8 +20,11 @@ class CommentReadSerializer(serializers.ModelSerializer):
     def get_commented_on(self, obj):
         return {'brid': obj.commented_on.brid}
     
+    def get_love_react_count(self, obj):
+        return obj.loved_by.count()
+    
     def get_loved_by(self, obj):
-        return obj.loved_by 
+        return {'rid': r.rid for r in obj.loved_by.all()}
     
 class CommentCreateSerializer(serializers.ModelSerializer):
     commented_by = serializers.PrimaryKeyRelatedField(queryset=Reader.objects.all(), required = True)

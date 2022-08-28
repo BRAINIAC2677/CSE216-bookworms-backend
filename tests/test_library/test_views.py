@@ -9,7 +9,7 @@ class TestLibraryAPIViewEndpoints:
 
     def test_register(self, api_client):
         baked_library = baker.prepare('library.Library', user__email='pytestlibrary@gmail.com')
-        data = {
+        create_data = {
             'user':{
                 'username': baked_library.user.username,
                 'email': baked_library.user.email,
@@ -20,8 +20,9 @@ class TestLibraryAPIViewEndpoints:
             'longitude': baked_library.longitude,
             'latitude': baked_library.latitude
         }
-        response = api_client.post(self.endpoint + 'register/', data = data, format = 'json')
-        print(response.data)
+        print(f'create_data:\n{create_data}')
+        response = api_client.post(self.endpoint + 'register/', data = create_data, format = 'json')
+        print(f'response data:\n{response.data}')
         assert response.status_code == 201
 
     def test_list(self, api_client, library_apiauth_token):

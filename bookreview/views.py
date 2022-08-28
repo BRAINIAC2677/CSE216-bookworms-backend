@@ -12,7 +12,21 @@ class BookReviewListAPIView(ListAPIView):
     permission_classes = [IsAuthenticated]
     
     def get_queryset(self):
-        return BookReview.objects.all()
+        bid = self.request.query_params.get('bid', None)
+        rid = self.request.query_params.get('rid', None)
+
+        if bid and rid is None:
+            return BookReview.objects.raw(
+                'SELECT * FROM book_review WHERE book_id = %s',
+                [bid]
+            )
+        elif rid and bid is None:
+            return BookReview.objects.raw(
+                'SELECT * FROM book_review WHERE reader_id = %s',
+                [rid]
+            )
+        else:
+            return BookReview.objects.raw('SELECT * FROM book_review')
 
 class BookReviewDetailAPIView(RetrieveAPIView):
     queryset = BookReview.objects.all()

@@ -3,7 +3,7 @@ from django.db import models
 from reader.models import Reader
 from book.models import Book
 
-class Reads(models.Model):
+class Read(models.Model):
     status_choices = (
         ('w', 'Want to Read'),
         ('r', 'Reading'),
@@ -17,7 +17,7 @@ class Reads(models.Model):
     status = models.CharField(max_length=1, choices=status_choices)
 
     class Meta:
-        db_table = 'reads'
+        db_table = 'read'
         
     def __str__(self):
         return str({
