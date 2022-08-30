@@ -5,12 +5,18 @@ from library.models import Library
 from .models import LibraryStock
 
 class LibraryStockReadSerializer(serializers.ModelSerializer):
-    book = serializers.StringRelatedField()
-    library = serializers.StringRelatedField()
+    book = serializers.SerializerMethodField()
+    library = serializers.SerializerMethodField()
     class Meta:
         model = LibraryStock
         fields = ['lsid', 'book', 'library', 'quantity', 'borrow_fee_per_day']
         read_only_fields = ('__all__',)
+    
+    def get_book(self, obj):
+        return {'bid':obj.book.bid,'title': obj.book.title, 'photo_url': obj.book.photo_url}
+    
+    def get_library(self, obj):
+        return {'lid':obj.library.lid}
 
 class LibraryStockCreateSerializer(serializers.ModelSerializer):
     book = serializers.PrimaryKeyRelatedField(queryset=Book.objects.all())
