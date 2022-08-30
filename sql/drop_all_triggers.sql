@@ -1,0 +1,1 @@
+DROP TRIGGER IF EXISTS bookreview_before_trigger ON book_review;
