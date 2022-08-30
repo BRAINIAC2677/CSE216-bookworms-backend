@@ -1,3 +1,5 @@
+from django.db import connection
+
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 
@@ -8,10 +10,11 @@ from reader.models import Reader
 class BookReadSerializer(serializers.ModelSerializer):
     genres = serializers.SerializerMethodField()
     authors = serializers.SerializerMethodField()
+    avg_rating = serializers.SerializerMethodField()
     
     class Meta:
         model = Book
-        fields = ['bid', 'title', 'description', 'photo_url', 'page_count', 'created_at', 'updated_at','genres', 'authors']
+        fields = ['bid', 'title', 'description', 'photo_url', 'page_count', 'created_at', 'updated_at','genres', 'authors', 'avg_rating']
         read_only_fields = ('__all__',)
     
     def get_genres(self, obj):
@@ -19,6 +22,13 @@ class BookReadSerializer(serializers.ModelSerializer):
     
     def get_authors(self, obj):
         return [{author.user.get_full_name(), author.rid} for author in obj.authors.all()]
+
+    def get_avg_rating(self, obj):
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT AVG(rating) avg_rating FROM book_review WHERE book_id = %s", [obj.bid])
+            row = cursor.fetchone()
+        return row[0]
+
     
 
 

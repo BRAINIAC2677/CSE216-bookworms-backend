@@ -208,6 +208,7 @@ class TestBookAPIViewEndpoints:
         lis_response = api_client.get(self.endpoint + 'list/', HTTP_AUTHORIZATION='Token ' + registered_reader['token'])
         endpoint = self.endpoint + 'detail/' + lis_response.data[0]['bid'] + '/'
         detail_response = api_client.get(endpoint, HTTP_AUTHORIZATION='Token ' + registered_reader['token'])
+        print(detail_response.data)
         assert detail_response.status_code == 200
 
     def test_delete(self, api_client, admin_reader_apiauth_token):

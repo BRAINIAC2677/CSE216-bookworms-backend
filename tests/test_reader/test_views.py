@@ -83,6 +83,6 @@ class TestReaderAPIViewEndpoints:
         update_response = api_client.patch(self.endpoint + 'update/', data = data, HTTP_AUTHORIZATION='Token ' + reader_apiauth_token, format = 'json')
         assert update_response.status_code == 200
 
-    def test_delete(self, api_client, reader_apiauth_token):
-        delete_response = api_client.delete(self.endpoint + 'delete/', HTTP_AUTHORIZATION='Token ' + reader_apiauth_token)
+    def test_delete(self, api_client, registered_reader):
+        delete_response = api_client.delete(self.endpoint + 'delete/' + str(registered_reader['rid']) + '/', HTTP_AUTHORIZATION='Token ' + registered_reader['token'])
         assert delete_response.status_code == 204
