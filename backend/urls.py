@@ -19,7 +19,7 @@ from django.urls import path, include, re_path
 from django.views.static import serve
 from django.conf import settings
 
-from rest_framework.authtoken.views import obtain_auth_token
+from reader.views import obtain_auth_token
 
 
 from rest_framework import permissions
