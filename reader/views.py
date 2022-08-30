@@ -4,7 +4,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 
 from .models import Reader
 from .serializers import ReaderReadSerializer, ReaderCreateSerializer, ReaderUpdateSerializer, AdminReaderCreateSerializer
-from .permissions import IsReaderAccountOwnerPermission, IsReaderUserPermission
+from .permissions import IsReaderAccountOwnerPermission, IsReaderUserPermission, HasReaderDeletePermission
 
 
 class ReaderRegisterAPIView(CreateAPIView):
@@ -48,11 +48,9 @@ class ReaderUpdateAPIView(UpdateAPIView):
 
 class ReaderDeleteAPIView(DestroyAPIView):
     authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated, IsReaderUserPermission]
+    permission_classes = [IsAuthenticated, HasReaderDeletePermission]
     queryset = Reader.objects.all()
-
-    def get_object(self):
-        return self.request.user.reader
+    lookup_field = 'rid'
 
     def perform_destroy(self, instance):
         instance.user.delete()

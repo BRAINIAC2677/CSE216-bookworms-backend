@@ -11,5 +11,5 @@ urlpatterns = [
     path('my-detail/', MyReaderDetailAPIView.as_view(), name='reader-my-detail'),
     path('detail/<int:rid>/', ReaderDetailAPIView.as_view(), name='reader-detail'),
     path('update/', ReaderUpdateAPIView.as_view(), name='reader-update'),
-    path('delete/', ReaderDeleteAPIView.as_view(), name='reader-delete'),
+    path('delete/<int:rid>/', ReaderDeleteAPIView.as_view(), name='reader-delete'),
 ]

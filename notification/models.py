@@ -5,7 +5,7 @@ class Notification(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     notification_to = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='notification_to_me')
     notification_from = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='notification_from_me')
-    event_id = models.ForeignKey('event.Event', on_delete=models.CASCADE)
+    event = models.ForeignKey('event.Event', on_delete=models.CASCADE)
     content_id = models.BigIntegerField() 
 
     class Meta:
@@ -17,6 +17,6 @@ class Notification(models.Model):
             'created_at': self.created_at,
             'notification_to': self.notification_to,
             'notification_from': self.notification_from,
-            'event_id': self.event_id,
+            'event': self.event,
             'content_id': self.content_id,
         })

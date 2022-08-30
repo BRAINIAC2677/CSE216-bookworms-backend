@@ -37,7 +37,7 @@ class ReaderReadSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Reader
-        fields = ['rid','user','bio', 'photo_url', 'points']
+        fields = ['rid','user','bio', 'photo_url', 'reputation']
         read_only_fields = ('__all__',)
 
     def get_user(self, obj):
@@ -48,8 +48,8 @@ class ReaderCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Reader
-        fields = ['rid','user', 'photo_url', 'bio', 'points']
-        read_only_fields = ('rid','points',)
+        fields = ['rid','user', 'photo_url', 'bio', 'reputation']
+        read_only_fields = ('rid','reputation',)
 
     def create(self, validated_data):
         user_data = validated_data.pop('user')
@@ -67,7 +67,7 @@ class ReaderUpdateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Reader
-        fields = ['rid','user', 'photo_url', 'bio', 'points']
+        fields = ['rid','user', 'photo_url', 'bio', 'reputation']
         read_only_fields = ('rid',)
 
     def update(self, instance, validated_data):
@@ -90,7 +90,7 @@ class AdminReaderCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Reader
-        fields = ['rid','user', 'photo_url', 'bio', 'points']
+        fields = ['rid','user', 'photo_url', 'bio', 'reputation']
         read_only_fields = ('rid',)
 
     def create(self, validated_data):

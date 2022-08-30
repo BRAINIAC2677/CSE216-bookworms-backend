@@ -1,0 +1,13 @@
+\i /home/brainiac77/github/bookworms_backend/sql/functions/book_review_before_trigger_function.sql 
+
+\i /home/brainiac77/github/bookworms_backend/sql/functions/book_review_loved_by_before_trigger_function.sql
+
+\i /home/brainiac77/github/bookworms_backend/sql/functions/book_borrow_before_trigger_function.sql
+
+\i /home/brainiac77/github/bookworms_backend/sql/functions/comment_before_trigger_function.sql
+
+\i /home/brainiac77/github/bookworms_backend/sql/functions/comment_loved_by_before_trigger_function.sql
+
+\i /home/brainiac77/github/bookworms_backend/sql/functions/friend_before_trigger_function.sql
+
+\i /home/brainiac77/github/bookworms_backend/sql/functions/read_before_trigger_function.sql

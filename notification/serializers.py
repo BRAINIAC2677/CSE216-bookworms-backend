@@ -7,7 +7,7 @@ class NotificationReadSerializer(serializers.ModelSerializer):
     notification_from = serializers.SerializerMethodField()
     class Meta:
         model = Notification
-        fields = ['nid', 'created_at', 'notification_to', 'notification_from', 'event_id', 'content_id']
+        fields = ['nid', 'created_at', 'notification_to', 'notification_from', 'event', 'content_id']
         read_only_fields = ('__all__',)
     
     def get_notification_to(self, obj):
