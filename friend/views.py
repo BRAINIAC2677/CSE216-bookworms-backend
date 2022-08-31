@@ -19,7 +19,7 @@ class FriendListAPIView(ListAPIView):
         rid = self.request.query_params.get('rid', None)
         if rid:
             return Friend.objects.raw(
-                'SELECT * FROM friend WHERE NOT is_pending AND (friendship_from_id = %s OR friendship_to_id = %s)',
+                'SELECT * FROM friend WHERE (is_pending = false) AND (friendship_from_id = %s OR friendship_to_id = %s)',
                 [rid, rid]
             )
         elif self.request.user.is_staff:
