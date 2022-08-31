@@ -14,23 +14,18 @@ class CommentListAPIView(ListAPIView):
     def get_queryset(self):
         rid = self.request.query_params.get('rid', None)
         brid = self.request.query_params.get('brid', None)
-        if rid and brid:
+        if rid:
             return Comment.objects.raw(
-                'SELECT * FROM comment WHERE commented_by_id = %s AND commented_on_id = %s',
-                [rid, brid]
-            )
-        elif rid:
-            return Comment.objects.raw(
-                'SELECT * FROM comment WHERE commented_by_id = %s',
+                'SELECT * FROM get_comments_r(%s)',
                 [rid]
             )
         elif brid:
             return Comment.objects.raw(
-                'SELECT * FROM comment WHERE commented_on_id = %s',
+                'SELECT * FROM get_comments_b(%s)',
                 [brid]
             )
         elif self.request.user.is_staff:
-            return Comment.objects.raw('SELECT * FROM comment')
+            return Comment.objects.raw('SELECT * FROM get_comments()')
         else:
             return Comment.objects.none()
 

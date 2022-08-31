@@ -17,16 +17,16 @@ class BookReviewListAPIView(ListAPIView):
 
         if bid and rid is None:
             return BookReview.objects.raw(
-                'SELECT * FROM book_review WHERE book_id = %s',
+                'SELECT * FROM get_book_reviews_b(%s)'
                 [bid]
             )
         elif rid and bid is None:
             return BookReview.objects.raw(
-                'SELECT * FROM book_review WHERE reader_id = %s',
+                'SELECT * FROM get_book_reviews_r(%s)',
                 [rid]
             )
         else:
-            return BookReview.objects.raw('SELECT * FROM book_review')
+            return BookReview.objects.raw('SELECT * FROM get_book_reviews()')
 
 class BookReviewDetailAPIView(RetrieveAPIView):
     queryset = BookReview.objects.all()

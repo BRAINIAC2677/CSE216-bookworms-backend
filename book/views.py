@@ -7,8 +7,8 @@ from .serializers import BookReadSerializer, BookCreateUpdateSerializer
 
 class BookListAPIView(ListAPIView):
     serializer_class = BookReadSerializer
-    # authentication_classes = [TokenAuthentication]
-    # permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         gte_page_count = self.request.query_params.get('gte_page_count')
@@ -71,27 +71,27 @@ class BookListAPIView(ListAPIView):
             )
 
 class BookCreateAPIView(CreateAPIView):
-    queryset = Book.objects.all()
+    queryset = Book.objects.raw('SELECT * FROM get_books()')
     serializer_class = BookCreateUpdateSerializer
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated, IsAdminUser]
 
 class BookRetrieveAPIView(RetrieveAPIView):
-    queryset = Book.objects.all()
+    queryset = Book.objects.raw('SELECT * FROM get_books()')
     serializer_class = BookReadSerializer
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
     lookup_field = 'bid'
 
 class BookUpdateAPIView(UpdateAPIView):
-    queryset = Book.objects.all()
+    queryset = Book.objects.raw('SELECT * FROM get_books()')
     serializer_class = BookCreateUpdateSerializer
     lookup_field = 'bid'
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated, IsAdminUser]
 
 class BookDestroyAPIView(DestroyAPIView):
-    queryset = Book.objects.all()
+    queryset = Book.objects.raw('SELECT * FROM get_books()')
     lookup_field = 'bid'
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated, IsAdminUser]

@@ -12,6 +12,6 @@ class NotificationListAPIView(ListAPIView):
 
     def get_queryset(self):
         return Notification.objects.raw(
-            'SELECT * FROM notification WHERE notification_to_id = %s',
+            'SELECT * FROM get_notifications_uid(%s)',
             [self.request.user.id]
         ) 

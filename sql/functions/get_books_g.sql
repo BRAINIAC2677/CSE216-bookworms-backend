@@ -14,7 +14,7 @@ begin
 return query (
     select *
     from book b
-    where page_count >= p_gte_page_count
+    where b.page_count >= p_gte_page_count
 );
 end;
 $$

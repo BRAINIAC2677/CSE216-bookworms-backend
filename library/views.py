@@ -20,11 +20,11 @@ class LibraryListAPIView(ListAPIView):
 
         if bid:
             return Library.objects.raw(
-                'SELECT * FROM library WHERE lid IN (SELECT library_id FROM library_stock WHERE book_id = %s)',
+                'SELECT * FROM get_libraries_b(%s)',
                 [bid]
             )
         else:
-            return Library.objects.raw('SELECT * FROM library')
+            return Library.objects.raw('SELECT * FROM get_libraries()')
 
 class LibraryDetailAPIView(RetrieveAPIView):
     queryset = Library.objects.all()

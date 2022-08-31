@@ -14,8 +14,8 @@ begin
 return query (
     select *
     from book b
-    where page_count >= p_gte_page_count
-    and page_count <= p_lte_page_count
+    where b.page_count >= p_gte_page_count
+    and b.page_count <= p_lte_page_count
     and p_genre_id IN (
         select genre_id
         from book_genres bg
