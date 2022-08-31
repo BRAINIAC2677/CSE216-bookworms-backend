@@ -17,7 +17,7 @@ class BookReviewListAPIView(ListAPIView):
 
         if bid and rid is None:
             return BookReview.objects.raw(
-                'SELECT * FROM get_book_reviews_b(%s)'
+                'SELECT * FROM book_review WHERE book_id = %s',
                 [bid]
             )
         elif rid and bid is None:

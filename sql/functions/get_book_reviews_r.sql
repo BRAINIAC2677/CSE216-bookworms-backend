@@ -13,7 +13,8 @@ as $$
 begin
     return query(
         select * from book_review br
-        where br.reviewer_id = p_bid
+        where br.reviewer_id = p_rid
     );
 end;
 $$
+
