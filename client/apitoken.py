@@ -3,8 +3,8 @@ import json
 
 endpoint = 'https://bookworms-back.herokuapp.com/api/api-token-auth/'
 
-username = '1'
-password = '1'
+username = 'tagore'
+password = '123'
 
 response = requests.post(endpoint, data={'username': username, 'password': password})
 
