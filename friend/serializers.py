@@ -3,7 +3,7 @@ from rest_framework import serializers
 from reader.models import Reader
 from .models import Friend
 
-class FriendReadSerializer(serializers.Serializer):
+class FriendReadSerializer(serializers.ModelSerializer):
     friendship_from = serializers.SerializerMethodField()
     friendship_to = serializers.SerializerMethodField()
     class Meta:
@@ -17,7 +17,7 @@ class FriendReadSerializer(serializers.Serializer):
     def get_friendship_to(self, obj):
         return {'rid': obj.friendship_to.rid}
 
-class FriendCreateSerializer(serializers.Serializer):
+class FriendCreateSerializer(serializers.ModelSerializer):
     friendship_from = serializers.PrimaryKeyRelatedField(queryset=Reader.objects.all())
     friendship_to = serializers.PrimaryKeyRelatedField(queryset=Reader.objects.all())
     class Meta:

@@ -6,7 +6,11 @@ declare
     f_uid integer;
     f_rid integer;
     t_uid integer;
+    c_time timestamp with time zone;
 begin
+    SELECT NOW() 
+    INTO c_time;
+
     if (TG_OP = 'INSERT') then
         -- before insert 
 
@@ -20,7 +24,7 @@ begin
         INTO t_uid 
         FROM reader 
         WHERE rid = NEW.friendship_to_id;
-        insert into notification (content_id, event_id, notification_from_id, notification_to_id) values (NEW.fid, 5, f_uid , t_uid);
+        insert into notification (created_at, content_id, event_id, notification_from_id, notification_to_id) values (c_time,NEW.fid, 5, f_uid , t_uid);
 
     elseif (TG_OP = 'UPDATE') then
         -- before update
@@ -36,7 +40,7 @@ begin
             INTO t_uid 
             FROM reader 
             WHERE rid = NEW.friendship_from_id;
-            insert into notification (content_id, event_id, notification_from_id, notification_to_id) values (NEW.fid,6, f_uid , t_uid);
+            insert into notification (created_at,content_id, event_id, notification_from_id, notification_to_id) values (c_time,NEW.fid,6, f_uid , t_uid);
         end if; 
 
     elseif (TG_OP = 'DELETE') then
