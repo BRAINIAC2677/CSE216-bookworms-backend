@@ -5,7 +5,7 @@ returns table(
     content text,
     created_at timestamp with time zone,
     updated_at timestamp with time zone,
-    book_id integer,
+    book_id varchar(13),
     reviewer_id integer
 )
 language plpgsql

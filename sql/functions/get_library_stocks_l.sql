@@ -1,10 +1,10 @@
 
-create or replace function get_library_stocks(p_lid integer)
+create or replace function get_library_stocks_l(p_lid integer)
 returns table(
     lsid integer,
     quantity integer,
     borrowed_fee_per_day integer,
-    book_id integer,
+    book_id varchar(13),
     library_id integer
 )
 language plpgsql

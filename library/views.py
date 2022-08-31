@@ -24,7 +24,7 @@ class LibraryListAPIView(ListAPIView):
                 [bid]
             )
         else:
-            return Library.objects.raw('SELECT * FROM get_libraries()')
+            return Library.objects.raw('SELECT * FROM library')
 
 class LibraryDetailAPIView(RetrieveAPIView):
     queryset = Library.objects.all()

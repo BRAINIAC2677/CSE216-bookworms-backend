@@ -4,7 +4,7 @@ returns table(
     lsid integer,
     quantity integer,
     borrowed_fee_per_day integer,
-    book_id integer,
+    book_id varchar(13),
     library_id integer
 )
 language plpgsql
