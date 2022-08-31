@@ -26,10 +26,7 @@ class BookBorrowListAPIView(ListAPIView):
                 [rid]
             )
         elif lid:
-            return BookBorrow.objects.raw(
-                'SELECT * FROM book_borrow WHERE borrowed_from_id = %s',
-                [lid]
-            )
+            return BookBorrow.objects.filter(borrowed_from_id=lid);
        # if the requested user is admin, return all the book borrows
         elif self.request.user.is_staff:
             return BookBorrow.objects.raw(
