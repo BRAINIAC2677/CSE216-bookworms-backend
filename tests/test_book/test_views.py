@@ -8,7 +8,7 @@ class TestBookAPIViewEndpoints:
 
     endpoint = '/api/book/'
 
-    @pytest.mark.parametrize('test_param_id',[x for x in range(1,22)])
+    @pytest.mark.parametrize('test_param_id',[x for x in range(12,22)])
     def test_list(self, api_client, test_param_id, registered_reader):
         baked_genre = baker.make('genre.Genre')
         baked_reader = baker.make('reader.Reader')
@@ -18,83 +18,12 @@ class TestBookAPIViewEndpoints:
         print(f'baked_reader:\n{baked_reader}')
         print(f'baked_book:\n{baked_book}')
 
-        bid = baked_book.bid
-        title = baked_book.title
         gte_page_count = baked_book.page_count
         lte_page_count = baked_book.page_count
         genre_id = baked_book.genres.all()[0].gid
         author_id = baked_book.authors.all()[0].rid
 
-        if test_param_id == 1:
-            query_data = {
-                'bid': bid, 
-                'title': title, 
-                'gte_page_count': gte_page_count, 
-                'lte_page_count': lte_page_count, 
-                'genre_id': genre_id, 
-                'author_id': author_id, 
-            }
-        elif test_param_id == 2:
-            query_data = {
-                'bid': bid,
-                'title': title,
-                'gte_page_count': gte_page_count,
-                'lte_page_count': lte_page_count,
-                'genre_id': genre_id,
-            }
-        elif test_param_id == 3:
-            query_data = {
-                'bid': bid,
-                'title': title,
-                'gte_page_count': gte_page_count,
-                'lte_page_count': lte_page_count,
-            }
-        elif test_param_id == 4:
-            query_data = {
-                'bid': bid,
-                'title': title,
-                'gte_page_count': gte_page_count,
-            }
-        elif test_param_id == 5:
-            query_data = {
-                'bid': bid,
-                'title': title,
-            }
-        elif test_param_id == 6:
-            query_data = {
-                'bid': bid,
-            }
-        elif test_param_id == 7:
-            query_data = {
-                'title': title,
-                'gte_page_count': gte_page_count,
-                'lte_page_count': lte_page_count,
-                'genre_id': genre_id,
-                'author_id': author_id,
-            }
-        elif test_param_id == 8:
-            query_data = {
-                'title': title,
-                'gte_page_count': gte_page_count,
-                'lte_page_count': lte_page_count,
-                'genre_id': genre_id,
-            }
-        elif test_param_id == 9:
-            query_data = {
-                'title': title,
-                'gte_page_count': gte_page_count,
-                'lte_page_count': lte_page_count,
-            }
-        elif test_param_id == 10:
-            query_data = {
-                'title': title,
-                'gte_page_count': gte_page_count,
-            }
-        elif test_param_id == 11:
-            query_data = {
-                'title': title,
-            }
-        elif test_param_id == 12:
+        if test_param_id == 12:
             query_data = {
                 'gte_page_count': gte_page_count,
                 'lte_page_count': lte_page_count,

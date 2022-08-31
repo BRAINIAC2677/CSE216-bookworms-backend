@@ -16,7 +16,7 @@ class LibraryStockListAPIView(ListAPIView):
         lid = self.request.query_params.get('lid', None)
         if lid:
             return LibraryStock.objects.raw(
-                'SELECT * FROM get_library_stock_l(%s)',
+                'SELECT * FROM get_library_stocks_l(%s)',
                 [lid]
             )
         else:
