@@ -55,6 +55,7 @@ urlpatterns = [
     path('api/friend/', include('friend.urls')),
     path('api/comment/', include('comment.urls')),
     path('api/notification/', include('notification.urls')),
+    path('api/event/', include('event.urls')),
 
     re_path(r'^media/(?P<path>.*)$', serve,{'document_root':settings.MEDIA_ROOT}), 
     re_path(r'^static/(?P<path>.*)$', serve,{'document_root':settings.STATIC_ROOT}), 

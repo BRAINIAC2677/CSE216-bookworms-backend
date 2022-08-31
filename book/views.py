@@ -15,6 +15,7 @@ class BookListAPIView(ListAPIView):
         lte_page_count = self.request.query_params.get('lte_page_count')
         genre_id = self.request.query_params.get('genre_id')
         author_id = self.request.query_params.get('author_id')
+
         if gte_page_count and lte_page_count and genre_id and author_id:
             return Book.objects.raw(
                 'SELECT * FROM get_books_glga(%s, %s, %s, %s)',
