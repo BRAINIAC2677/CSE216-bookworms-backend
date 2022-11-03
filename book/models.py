@@ -11,8 +11,8 @@ class Book(models.Model):
     page_count = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    genres = models.ManyToManyField(Genre, on_delete=models.CASCADE)
-    authors = models.ManyToManyField(Reader, related_name='authored_books', on_delete=models.CASCADE)
+    genres = models.ManyToManyField(Genre)
+    authors = models.ManyToManyField(Reader, related_name='authored_books')
 
     class Meta:
         db_table = 'book'

@@ -46,3 +46,10 @@ BEFORE INSERT OR UPDATE OR DELETE
 ON book_borrow
 FOR EACH ROW 
     EXECUTE PROCEDURE book_borrow_before_trigger_function();
+
+-- before book 
+CREATE OR REPLACE TRIGGER book_before_trigger
+BEFORE INSERT OR UPDATE OR DELETE
+ON book
+FOR EACH ROW
+    EXECUTE PROCEDURE book_before_trigger_function();
