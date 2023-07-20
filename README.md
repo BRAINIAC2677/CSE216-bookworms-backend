@@ -1,4 +1,4 @@
-# Bookworms Backend
+# CSE216 | Bookworms Backend
 
 ![](/assets/logo.png)
 
