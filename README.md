@@ -4,7 +4,7 @@
 
 Part of term project of CSE 216|Database, 2022, BUET.
 <br>
-### **Check out the documentation [here](https://bookworms-back.herokuapp.com/swagger/).**
+### ~~Check out the documentation [here](https://bookworms-back.herokuapp.com/redoc/).~~ (Heroku discontinued their free plans. So, not working anymore)
 
 ## **Built With**
 - :blue_heart: 
